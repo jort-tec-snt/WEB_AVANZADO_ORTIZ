@@ -1,26 +1,25 @@
-# express-mongo-auth
+## Evidencias
 
-API REST con Express + MongoDB Atlas (Mongoose) + JWT y roles. Laboratorio 08 – DAWA.
+Pruebas con **Thunder Client** (VS Code) contra la API en local, conectada a MongoDB Atlas.
 
-## Endpoints
-| Método | Ruta | Acceso |
+### Autenticación
+| Prueba | Resultado esperado | Captura |
 |---|---|---|
-| POST | `/api/auth/register` | Público (`name`, `email`, `password`, `role` opcional) |
-| POST | `/api/auth/login` | Público → devuelve `token` |
-| GET | `/api/auth/profile` | Bearer token |
-| GET | `/api/users` | Bearer token + rol `admin` |
-| GET | `/api/users/:id` | Bearer token |
-| PUT/DELETE | `/api/users/:id` | Bearer token + rol `admin` |
+| Registro de admin | 201 + token | ![Registro admin](img/api-auth-register-admin.png) |
+| Registro de usuario | 201 | ![Registro usuario](img/api-auth-register-user.png) |
+| Login de usuario | 200 + token | ![Login usuario](img/api-auth-login-user.png) |
 
-## Local
-```bash
-pnpm install
-cp .env.example .env   # completa MONGO_URI y JWT_SECRET
-pnpm dev
-```
+### Rutas protegidas y roles
+| Prueba | Resultado esperado | Captura |
+|---|---|---|
+| `GET /api/auth/profile` sin token | 401 | ![Profile sin token](img/api-auth-profile-user-sintokens-unauthorized-401.png) |
+| `GET /api/auth/profile` con token | 200 | ![Profile con token](img/api-auth-profile-user-tokens-autorized.png) |
+| `GET /api/users` con token de usuario | 403 | ![Users 403](img/api-users-tokens-user-forbidden-403.png) |
+| `GET /api/users` con token de admin | 200 | ![Users admin](img/api-users-tokens-admin.png) |
 
-## Despliegue (Render + GitHub Actions)
-- Build Command: `pnpm install` · Start Command: `pnpm start`
-- Variables en Render: `MONGO_URI`, `JWT_SECRET`, `NODE_ENV=production`
-- Secret en GitHub: `RENDER_DEPLOY_HOOK_URL`
-- Workflow: `.github/workflows/deploy.yml` (push a `main` → dispara el Deploy Hook)
+### Base de datos en la nube
+_pendiente: captura de la colección `users` en MongoDB Atlas_
+
+### Despliegue (Render + GitHub Actions)
+- API en la nube: _pendiente_
+- Pipeline en verde: _pendiente_
