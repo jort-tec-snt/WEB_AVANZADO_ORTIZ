@@ -1,0 +1,28 @@
+<%- include('../partials/head') %>
+
+<main class="container auth-container" data-auth-page="user">
+  <div class="card auth-card">
+    <div class="card-content">
+      <h4 class="auth-title">Mi cuenta</h4>
+      <p class="grey-text text-darken-1 auth-subtitle">Bienvenido a tu dashboard</p>
+      <p id="loadingMessage" role="status">Cargando tus datos…</p>
+      <div id="message" class="auth-message" role="status"></div>
+      <div id="protectedContent" hidden>
+        <ul class="collection">
+          <li class="collection-item"><strong>Nombre:</strong> <span data-user-field="name"></span></li>
+          <li class="collection-item"><strong>Apellido:</strong> <span data-user-field="lastName"></span></li>
+          <li class="collection-item"><strong>Email:</strong> <span data-user-field="email"></span></li>
+          <li class="collection-item"><strong>Teléfono:</strong> <span data-user-field="phoneNumber"></span></li>
+          <li class="collection-item"><strong>Edad:</strong> <span data-user-field="age"></span></li>
+          <li class="collection-item"><strong>Rol:</strong> <span data-user-field="roles"></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-action">
+      <a href="/profile" class="blue-text text-darken-2">Mi perfil</a>
+      <button type="button" data-logout class="btn waves-effect waves-light blue darken-2">Cerrar sesión</button>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,34 @@
+<%- include('../partials/head') %>
+
+<main class="container auth-container" data-auth-page="admin">
+  <div class="card auth-card">
+    <div class="card-content">
+      <h4 class="auth-title">Administración</h4>
+      <p class="grey-text text-darken-1 auth-subtitle">Usuarios registrados</p>
+      <p id="loadingMessage" role="status">Cargando usuarios…</p>
+      <div id="message" class="auth-message" role="status"></div>
+      <div id="protectedContent" hidden>
+        <table class="striped highlight responsive-table">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Apellido</th>
+              <th scope="col">Email</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Edad</th>
+              <th scope="col">Rol</th>
+              <th scope="col">Fecha de registro</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-action">
+      <a href="/profile" class="blue-text text-darken-2">Mi perfil</a>
+      <button type="button" data-logout class="btn waves-effect waves-light blue darken-2">Cerrar sesión</button>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

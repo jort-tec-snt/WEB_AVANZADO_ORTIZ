@@ -1,0 +1,62 @@
+<%- include('../partials/head') %>
+
+<main class="container auth-container" data-auth-page="profile">
+  <div class="row">
+    <div class="col s12 m10 offset-m1 l8 offset-l2">
+      <div class="card auth-card">
+        <div class="card-content">
+          <h4 class="auth-title">Mi perfil</h4>
+          <p class="grey-text text-darken-1 auth-subtitle">Consulta y actualiza tus datos personales</p>
+          <p id="loadingMessage" role="status">Cargando tu perfil…</p>
+          <div id="message" class="auth-message" role="status"></div>
+          <div id="protectedContent" hidden>
+            <ul class="collection">
+              <li class="collection-item"><strong>Email:</strong> <span data-user-field="email"></span></li>
+              <li class="collection-item"><strong>Edad:</strong> <span data-user-field="age"></span></li>
+              <li class="collection-item"><strong>Roles:</strong> <span data-user-field="roles"></span></li>
+            </ul>
+            <form id="profileForm" method="post" action="/api/users/me" novalidate>
+              <div class="row form-row">
+                <div class="input-field col s12 m6">
+                  <input id="name" name="name" type="text" required>
+                  <label for="name" class="active">Nombre</label>
+                </div>
+                <div class="input-field col s12 m6">
+                  <input id="lastName" name="lastName" type="text" required>
+                  <label for="lastName" class="active">Apellido</label>
+                </div>
+              </div>
+              <div class="row form-row">
+                <div class="input-field col s12 m6">
+                  <input id="phoneNumber" name="phoneNumber" type="tel" required>
+                  <label for="phoneNumber" class="active">Teléfono</label>
+                </div>
+                <div class="input-field col s12 m6">
+                  <input id="birthdate" name="birthdate" type="date" required>
+                  <label for="birthdate" class="active">Fecha de nacimiento</label>
+                </div>
+              </div>
+              <div class="input-field">
+                <input id="url_profile" name="url_profile" type="url">
+                <label for="url_profile" class="active">URL de perfil</label>
+              </div>
+              <div class="input-field">
+                <input id="address" name="address" type="text">
+                <label for="address" class="active">Dirección</label>
+              </div>
+              <div class="action-container">
+                <button type="submit" class="btn waves-effect waves-light blue darken-2">Guardar cambios</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="card-action">
+          <a id="dashboardLink" href="/user/dashboard" class="blue-text text-darken-2">Volver al dashboard</a>
+          <button type="button" data-logout class="btn waves-effect waves-light blue darken-2">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>
