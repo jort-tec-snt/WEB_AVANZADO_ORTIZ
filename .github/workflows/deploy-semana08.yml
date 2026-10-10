@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'semana08/express-mongo-auth/**'
+      - 'semana07/express-mongo-auth/**'
       - '.github/workflows/deploy-semana08.yml'
 
 jobs:
