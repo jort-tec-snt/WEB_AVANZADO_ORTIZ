@@ -1,6 +1,7 @@
 <%- include('../partials/head') %>
 
 <main class="container auth-container" data-auth-page="admin">
+  <%- include('../partials/reel-nav', { withReviews: false }) %>
   <div class="card auth-card">
     <div class="card-content">
       <h4 class="auth-title">Administración</h4>
@@ -22,6 +23,7 @@
           </thead>
           <tbody id="usersTableBody"></tbody>
         </table>
+        <%- include('../partials/env-panel') %>
       </div>
     </div>
     <div class="card-action">

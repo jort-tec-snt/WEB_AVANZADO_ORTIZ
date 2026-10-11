@@ -1,6 +1,7 @@
 <%- include('../partials/head') %>
 
 <main class="container auth-container" data-auth-page="user">
+  <%- include('../partials/reel-nav', { withReviews: true }) %>
   <div class="card auth-card">
     <div class="card-content">
       <h4 class="auth-title">Mi cuenta</h4>
@@ -16,6 +17,8 @@
           <li class="collection-item"><strong>Edad:</strong> <span data-user-field="age"></span></li>
           <li class="collection-item"><strong>Rol:</strong> <span data-user-field="roles"></span></li>
         </ul>
+        <%- include('../partials/env-panel') %>
+        <%- include('../partials/resenas') %>
       </div>
     </div>
     <div class="card-action">

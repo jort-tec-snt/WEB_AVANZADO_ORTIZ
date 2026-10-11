@@ -135,3 +135,26 @@ body {
     font-size: 1.5rem;
   }
 }
+
+/* Panel de entorno */
+.env-panel { margin-top: 28px; padding-top: 20px; border-top: 1px solid #e0e0e0; }
+.env-title { font-size: 1.25rem; font-weight: 600; color: #1a237e; margin: 0 0 14px; }
+.env-sub { font-size: 0.95rem; font-weight: 600; color: #455a64; margin: 22px 0 10px; }
+.env-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.env-tile { display: flex; flex-direction: column; gap: 6px; padding: 14px; background: #f7f9fc; border: 1px solid #e3e8ef; border-radius: 8px; }
+.env-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: #78909c; }
+.env-note { font-size: 0.8rem; color: #78909c; }
+.env-chip { align-self: flex-start; padding: 3px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; background: #eceff1; color: #455a64; }
+.env-chip--ok { background: #e8f5e9; color: #2e7d32; }
+.env-chip--bad { background: #ffebee; color: #c62828; }
+.env-chip--info { background: #e8eaf6; color: #283593; }
+.env-pipeline { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; counter-reset: step; }
+.env-pipeline li { counter-increment: step; flex: 1 1 130px; padding: 10px 12px; background: #fff; border: 1px solid #c5cae9; border-radius: 8px; display: flex; flex-direction: column; font-size: 0.85rem; }
+.env-pipeline li::before { content: counter(step); font-size: 0.7rem; font-weight: 700; color: #3949ab; }
+.env-pipeline li span { color: #78909c; font-size: 0.78rem; }
+.env-access { list-style: none; margin: 0; padding: 0; }
+.env-access li { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eceff1; font-size: 0.9rem; }
+.env-access li span { color: #78909c; flex: 1 1 160px; }
+.env-access b { font-size: 0.8rem; }
+.env-access--yes b { color: #2e7d32; }
+.env-access--no b { color: #c62828; }
