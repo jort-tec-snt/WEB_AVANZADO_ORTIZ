@@ -1,39 +1,30 @@
-<%
-  // Reseñas fijas en la vista; para editarlas basta cambiar este arreglo.
-  const films = [
-    { t: 'Tetsuo: The Iron Man', y: 1989, m: 67, f: '16 mm · B/N', tags: 'Cyberpunk // Body horror', s: 9,
-      r: 'Un asalariado se convierte en chatarra: metal que brota de la carne a ritmo de percusión industrial. Es ruido, stop motion y furia en una hora; agota y fascina por igual.' },
-    { t: 'Begotten', y: 1989, m: 72, f: '16 mm · B/N', tags: 'Experimental // Ritual', s: 8,
-      r: 'Sin diálogos y con un grano tan sucio que parece grabado en un sótano. Más pesadilla que película: no se disfruta, se sobrevive.' },
-    { t: 'Videodrome', y: 1983, m: 87, f: '35 mm · Color', tags: 'Body horror // Medios', s: 9,
-      r: 'La televisión como carne y la carne como pantalla. Cronenberg predijo la obsesión con lo que consumimos, y sigue perturbando.' },
-    { t: 'Possession', y: 1981, m: 124, f: '35 mm · Color', tags: 'Horror // Ruptura', s: 9,
-      r: 'Una separación que se descompone en algo monstruoso. La actuación de Isabelle Adjani en el metro es de lo más desquiciado que ha dado el cine.' },
-    { t: 'Society', y: 1989, m: 99, f: '35 mm · Color', tags: 'Sátira // Body horror', s: 8,
-      r: 'Comedia incómoda sobre la élite hasta que el último acto se desborda en efectos prácticos grotescos. Subestimada y muy inventiva.' },
-    { t: 'Eraserhead', y: 1977, m: 89, f: '35 mm · B/N', tags: 'Surrealismo // Industrial', s: 8,
-      r: 'Paranoia doméstica filmada como sueño febril. El sonido ambiente hace el trabajo pesado: entra por el oído y se queda.' },
-    { t: 'Basket Case', y: 1982, m: 91, f: '16 mm · Color', tags: 'Bajo presupuesto // Culto', s: 7,
-      r: 'Cine de grindhouse neoyorquino con un monstruo en una canasta y muchísimo corazón trash. Imperfecta, pero con carácter de sobra.' },
-    { t: 'Carnival of Souls', y: 1962, m: 78, f: '35 mm · B/N', tags: 'Gótico // Culto', s: 7,
-      r: 'Hecha con casi nada, pero su atmósfera de órgano y feria abandonada pesa más que muchos presupuestos grandes.' }
-  ];
-%>
+<% const admin = typeof isAdmin !== 'undefined' && isAdmin; %>
 <section class="reel-catalog" id="resenas" aria-label="Catálogo de reseñas">
   <h5 class="env-title">Archivo // Reseñas de cine de terror underground</h5>
-  <div class="reel-grid">
-    <% films.forEach((film, i) => { %>
-      <article class="reel-card">
-        <div class="reel-poster" aria-hidden="true"><%= String(i + 1).padStart(2, '0') %></div>
-        <h6><%= film.t %></h6>
-        <p class="reel-meta"><%= film.y %> · <%= film.m %> min · <%= film.f %></p>
-        <p class="reel-tags"><%= film.tags %></p>
-        <span class="reel-score">Nota: <%= film.s %>/10</span>
-        <details>
-          <summary>LEER // RESEÑA</summary>
-          <p><%= film.r %></p>
-        </details>
-      </article>
-    <% }) %>
-  </div>
+
+  <% if (admin) { %>
+  <form id="reviewForm" class="reel-form" novalidate>
+    <h6 id="reviewFormTitle" class="env-sub">Nueva reseña</h6>
+    <input type="hidden" name="id">
+    <div class="reel-form-grid">
+      <label>Título <input class="browser-default" name="title" type="text" maxlength="120" required></label>
+      <label>Año <input class="browser-default" name="year" type="number" min="1888" max="2100" required></label>
+      <label>Duración (min) <input class="browser-default" name="minutes" type="number" min="1" max="999"></label>
+      <label>Formato <input class="browser-default" name="format" type="text" maxlength="40" placeholder="35 mm · B/N"></label>
+      <label>Etiquetas <input class="browser-default" name="tags" type="text" maxlength="100" placeholder="Gótico // Culto"></label>
+      <label>Nota (0-10) <input class="browser-default" name="score" type="number" min="0" max="10"></label>
+    </div>
+    <label>Reseña <textarea class="browser-default" name="text" rows="4" maxlength="2000" required></textarea></label>
+    <label>Carátula (JPEG, PNG o WebP; se reduce a 800 px) <input class="browser-default" name="image" type="file" accept="image/jpeg,image/png,image/webp"></label>
+    <label class="reel-check" id="removeImageRow" hidden><input type="checkbox" name="removeImage"> Quitar la carátula actual</label>
+    <div class="reel-form-actions">
+      <button class="btn" type="submit">Guardar reseña</button>
+      <button class="btn" type="button" id="cancelEdit" hidden>Cancelar edición</button>
+    </div>
+  </form>
+  <% } %>
+
+  <p id="reviewMessage" role="status"></p>
+  <div class="reel-grid" id="reviewsGrid" data-admin="<%= admin %>"></div>
 </section>
+<script src="/js/reviews.js"></script>

@@ -7,9 +7,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/users.routes.js';
+import reviewRoutes from './routes/reviews.routes.js';
 import webRoutes from './routes/web.routes.js';
 import seedRoles from './utils/seedRoles.js';
 import seedUsers from './utils/seedUsers.js';
+import seedReviews from './utils/seedReviews.js';
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.set('trust proxy', 1);
 
 // La web se sirve desde el mismo origen: sin CORS salvo que se defina CORS_ORIGIN
 app.use(cors({ origin: process.env.CORS_ORIGIN || false }));
+// Las reseñas llevan la carátula en base64: parser propio con límite mayor, solo en esta ruta.
+app.use('/api/reviews', express.json({ limit: '2mb' }), reviewRoutes);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -73,6 +77,7 @@ try {
   console.log('Mongo connected');
   await seedRoles();
   await seedUsers();
+  await seedReviews();
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
   });

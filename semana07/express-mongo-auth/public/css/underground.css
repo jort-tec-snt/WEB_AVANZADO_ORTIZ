@@ -162,3 +162,22 @@ th { color: var(--cyan); letter-spacing: 0.08em; }
 @media (prefers-reduced-motion: reduce) {
   .env-pulse polyline { animation: none; stroke-dashoffset: 0; }
 }
+
+/* Gestión de reseñas (admin) */
+.reel-form { margin: 0 0 22px; padding: 16px; background: var(--panel-2); border: 1px solid var(--line); }
+.reel-form label { display: flex; flex-direction: column; gap: 4px; margin: 10px 0; color: var(--muted); font-size: 0.82rem; }
+.reel-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0 14px; }
+.reel-form input.browser-default, .reel-form textarea.browser-default {
+  width: 100%; background: #070e12; color: var(--text); border: 1px solid var(--line); border-radius: 0;
+  padding: 8px; font: inherit; color-scheme: dark;
+}
+.reel-form input.browser-default:focus, .reel-form textarea.browser-default:focus { outline: none; border-color: var(--cyan); }
+.reel-form .reel-check { flex-direction: row; align-items: center; gap: 8px; }
+.reel-form-actions, .reel-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.reel-actions .btn { padding: 4px 12px; font-size: 0.78rem; height: auto; line-height: 1.6; }
+.reel-danger { border-color: var(--blood) !important; color: #ff4d6d !important; }
+.reel-danger:hover { background: var(--blood) !important; color: #fff !important; box-shadow: 0 0 12px var(--blood) !important; }
+.reel-poster--img { width: 100%; height: 130px; object-fit: cover; display: block; }
+#reviewMessage:empty { display: none; }
+[hidden] { display: none !important; }
+.reel-form ::placeholder { color: #3d5c63; opacity: 1; }
