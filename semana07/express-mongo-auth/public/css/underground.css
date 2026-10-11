@@ -1,0 +1,159 @@
+/* Tema "underground": archivo de cine de terror. Se carga después de styles.css;
+   para volver al diseño anterior basta quitar su <link> en partials/head.ejs */
+:root {
+  --bg: #04070a;
+  --panel: #0a1317;
+  --panel-2: #0e1c22;
+  --line: #12424d;
+  --cyan: #19e3ff;
+  --blood: #c4122f;
+  --text: #c9e7ec;
+  --muted: #6d8f96;
+}
+
+body {
+  background: var(--bg) radial-gradient(ellipse at top, #0a2028 0%, var(--bg) 60%) fixed;
+  color: var(--text);
+  font-family: 'Share Tech Mono', 'Consolas', monospace;
+}
+
+/* grano de película / scanlines */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+  z-index: 50;
+}
+
+a { color: var(--cyan); }
+
+/* Barra superior y navegación */
+.reel-topbar {
+  padding: 8px 20px;
+  background: #000;
+  border-bottom: 1px solid var(--blood);
+  color: var(--blood);
+  font-family: 'Metal Mania', cursive;
+  letter-spacing: 0.12em;
+  font-size: 1.1rem;
+}
+.reel-topbar small { font-family: 'Share Tech Mono', monospace; color: var(--muted); margin-left: 12px; letter-spacing: 0.05em; }
+
+.reel-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.reel-nav a { color: var(--cyan); text-decoration: none; font-size: 0.9rem; letter-spacing: 0.08em; }
+.reel-nav a::before { content: '// '; color: var(--blood); }
+.reel-nav a:hover { color: #fff; text-shadow: 0 0 8px var(--cyan); }
+
+/* Tarjetas y títulos */
+.auth-card, .card {
+  background: var(--panel) !important;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  box-shadow: 0 0 24px rgba(25, 227, 255, 0.08), inset 0 0 40px rgba(0, 0, 0, 0.5);
+  color: var(--text);
+}
+.auth-title {
+  font-family: 'Metal Mania', cursive;
+  color: var(--text);
+  letter-spacing: 0.06em;
+  text-shadow: 2px 0 var(--blood), -2px 0 var(--cyan);
+}
+.auth-subtitle, .grey-text { color: var(--muted) !important; }
+.auth-subtitle::before { content: '> '; color: var(--blood); }
+.auth-card .card-action { background: #070e12; border-top: 1px solid var(--line); }
+.auth-card .card-action a { color: var(--cyan) !important; }
+
+/* Formularios */
+.input-field input[type='text'], .input-field input[type='email'], .input-field input[type='password'],
+.input-field input[type='tel'], .input-field input[type='date'] {
+  color: var(--text);
+  border-bottom: 1px solid var(--line);
+}
+.input-field label { color: var(--muted); }
+.input-field .prefix { color: var(--blood); }
+.input-field input:focus, .input-field input:focus + label { color: var(--cyan) !important; }
+.input-field input[type='text']:focus, .input-field input[type='email']:focus, .input-field input[type='password']:focus,
+.input-field input[type='tel']:focus, .input-field input[type='date']:focus {
+  border-bottom: 1px solid var(--cyan) !important;
+  box-shadow: 0 1px 0 0 var(--cyan) !important;
+}
+
+/* Botones */
+.btn, .btn-large {
+  background: transparent !important;
+  color: var(--cyan) !important;
+  border: 1px solid var(--cyan);
+  border-radius: 0;
+  box-shadow: none;
+  letter-spacing: 0.12em;
+}
+.btn.blue.darken-2, .btn-large.blue.darken-2 { background-color: transparent !important; }
+.btn:hover, .btn-large:hover, .btn.blue.darken-2:hover { background: var(--cyan) !important; color: #000 !important; box-shadow: 0 0 14px var(--cyan); }
+
+/* Listas y tablas */
+.collection { border: 1px solid var(--line); }
+.collection .collection-item { background: var(--panel-2); color: var(--text); border-bottom: 1px solid var(--line); }
+.collection .collection-item strong { color: var(--blood); }
+table.striped > tbody > tr:nth-child(odd) { background: var(--panel-2); }
+table.highlight > tbody > tr:hover { background: #12303a; }
+td, th { color: var(--text); border-bottom: 1px solid var(--line); }
+th { color: var(--cyan); letter-spacing: 0.08em; }
+
+/* Panel de entorno (sobrescribe los colores claros de styles.css) */
+.env-panel { border-top: 1px dashed var(--blood); }
+.env-title, .env-sub { font-family: 'Metal Mania', cursive; color: var(--cyan); letter-spacing: 0.08em; }
+.env-tile { background: var(--panel-2); border: 1px solid var(--line); border-radius: 0; }
+.env-label, .env-note { color: var(--muted); }
+.env-chip { background: #12303a; color: var(--text); border-radius: 0; border: 1px solid var(--line); }
+.env-chip--ok { background: #062a1a; color: #2dff9a; border-color: #2dff9a; }
+.env-chip--bad { background: #2a0610; color: #ff4d6d; border-color: var(--blood); }
+.env-chip--info { background: #0a2030; color: var(--cyan); border-color: var(--cyan); }
+.env-pipeline li { background: var(--panel-2); border: 1px solid var(--line); border-radius: 0; }
+.env-pipeline li::before { color: var(--blood); }
+.env-pipeline li span { color: var(--muted); }
+.env-access li { border-bottom: 1px solid var(--line); }
+.env-access code { color: var(--cyan); background: transparent; }
+.env-access--yes b { color: #2dff9a; }
+.env-access--no b { color: #ff4d6d; }
+.env-pulse { width: 100%; height: 34px; }
+.env-pulse polyline { fill: none; stroke: var(--blood); stroke-width: 2; stroke-dasharray: 260; animation: pulse 2.4s linear infinite; }
+@keyframes pulse { from { stroke-dashoffset: 260; } to { stroke-dashoffset: -260; } }
+
+/* Catálogo de reseñas */
+.reel-catalog { margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--blood); }
+.reel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.reel-card { background: var(--panel-2); border: 1px solid var(--line); padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.reel-card:hover { border-color: var(--cyan); box-shadow: 0 0 16px rgba(25, 227, 255, 0.25); }
+.reel-poster {
+  height: 90px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Metal Mania', cursive; font-size: 2.4rem; color: rgba(255, 255, 255, 0.85);
+  background: linear-gradient(135deg, #3a0612 0%, #0a2a34 100%);
+  border: 1px solid var(--line);
+}
+.reel-card h6 { margin: 4px 0 0; font-size: 1rem; color: var(--cyan); }
+.reel-meta, .reel-tags { margin: 0; font-size: 0.78rem; color: var(--muted); }
+.reel-tags { color: var(--blood); }
+.reel-score { font-size: 0.85rem; color: var(--text); }
+.reel-card details summary {
+  cursor: pointer; text-align: center; padding: 6px; font-size: 0.8rem; letter-spacing: 0.1em;
+  color: var(--cyan); border: 1px solid var(--cyan); list-style: none;
+}
+.reel-card details summary::-webkit-details-marker { display: none; }
+.reel-card details[open] summary { background: var(--cyan); color: #000; }
+.reel-card details p { font-size: 0.82rem; line-height: 1.5; margin: 8px 0 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .env-pulse polyline { animation: none; stroke-dashoffset: 0; }
+}

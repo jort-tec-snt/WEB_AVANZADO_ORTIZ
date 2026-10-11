@@ -1,0 +1,38 @@
+<section class="env-panel" id="entorno" aria-label="Estado del entorno">
+  <h5 class="env-title">Entorno de despliegue</h5>
+
+  <div class="env-grid">
+    <div class="env-tile">
+      <span class="env-label">API</span>
+      <span id="envHealth" class="env-chip">comprobando…</span>
+      <span id="envLatency" class="env-note"></span>
+      <svg class="env-pulse" viewBox="0 0 260 34" aria-hidden="true"><polyline points="0,17 40,17 50,17 58,4 66,30 74,17 120,17 130,17 138,8 146,26 154,17 260,17"/></svg>
+    </div>
+    <div class="env-tile">
+      <span class="env-label">Tu sesión (JWT)</span>
+      <span id="envRole" class="env-chip env-chip--info">—</span>
+      <span id="envExpiry" class="env-note"></span>
+    </div>
+    <div class="env-tile">
+      <span class="env-label">Plataforma</span>
+      <span class="env-chip env-chip--info">Render · Node · plan Free</span>
+      <span class="env-note">Base de datos: MongoDB Atlas</span>
+    </div>
+  </div>
+
+  <h6 class="env-sub">Flujo CI/CD</h6>
+  <ol class="env-pipeline">
+    <li><strong>git push</strong><span>rama main</span></li>
+    <li><strong>GitHub Actions</strong><span>workflow deploy</span></li>
+    <li><strong>Deploy Hook</strong><span>secret en GitHub</span></li>
+    <li><strong>Render</strong><span>build y despliegue</span></li>
+    <li><strong>Atlas</strong><span>datos de usuarios</span></li>
+  </ol>
+
+  <h6 class="env-sub">Qué puede hacer tu rol</h6>
+  <ul class="env-access" id="envAccess">
+    <li data-route="/api/users/me" data-roles="user,admin"><code>GET /api/users/me</code><span>Tu perfil</span></li>
+    <li data-route="/api/users" data-roles="admin"><code>GET /api/users</code><span>Listar usuarios (solo admin)</span></li>
+  </ul>
+</section>
+<script src="/js/env-panel.js"></script>
