@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -20,12 +21,23 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(cors());
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
+
+// La web se sirve desde el mismo origen: sin CORS salvo que se defina CORS_ORIGIN
+app.use(cors({ origin: process.env.CORS_ORIGIN || false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
+// ponytail: límite por IP en memoria; con varias instancias usar un store compartido
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  message: { message: 'Demasiados intentos, intente más tarde' }
+});
+
 app.use('/', webRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);
 
 app.get('/health', (req, res) => {
@@ -43,8 +55,12 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.status || 500).json({
-    message: err.message || 'Error interno del servidor'
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ message: 'JSON inválido' });
+  }
+  const status = err.status || 500;
+  res.status(status).json({
+    message: status >= 500 ? 'Error interno del servidor' : err.message
   });
 });
 
