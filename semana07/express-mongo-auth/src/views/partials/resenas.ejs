@@ -25,6 +25,24 @@
   <% } %>
 
   <p id="reviewMessage" role="status"></p>
+
+  <div class="reel-stage" id="reelStage" aria-roledescription="carrusel" aria-label="Cartelera" hidden>
+    <h6 class="env-sub">En cartelera</h6>
+    <div class="reel-viewport" id="reelViewport"><div class="reel-track" id="reelTrack"></div></div>
+    <div class="reel-controls">
+      <button class="btn" type="button" id="reelPrev" aria-label="Película anterior">&larr;</button>
+      <button class="btn" type="button" id="reelPause" aria-pressed="false">Pausar</button>
+      <button class="btn" type="button" id="reelNext" aria-label="Película siguiente">&rarr;</button>
+    </div>
+    <div class="reel-caption" id="reelCaption" aria-live="off">
+      <h3 id="reelTitle"></h3>
+      <p class="reel-meta" id="reelMeta"></p>
+      <p class="reel-tags" id="reelTags"></p>
+      <p class="reel-caption-text" id="reelText"></p>
+      <button class="btn" type="button" id="reelMore">Leer completa</button>
+    </div>
+  </div>
+
   <div class="reel-grid" id="reviewsGrid" data-admin="<%= admin %>"></div>
 </section>
 <script src="/js/reviews.js"></script>

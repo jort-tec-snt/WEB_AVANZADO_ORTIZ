@@ -137,13 +137,13 @@ th { color: var(--cyan); letter-spacing: 0.08em; }
 
 /* Catálogo de reseñas */
 .reel-catalog { margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--blood); }
-.reel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.reel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
 .reel-card { background: var(--panel-2); border: 1px solid var(--line); padding: 10px; display: flex; flex-direction: column; gap: 6px; }
 .reel-card:hover { border-color: var(--cyan); box-shadow: 0 0 16px rgba(25, 227, 255, 0.25); }
 .reel-poster {
-  height: 90px;
+  width: 100%; aspect-ratio: 2 / 3;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Metal Mania', cursive; font-size: 2.4rem; color: rgba(255, 255, 255, 0.85);
+  font-family: 'Metal Mania', cursive; font-size: 3.2rem; color: rgba(255, 255, 255, 0.85);
   background: linear-gradient(135deg, #3a0612 0%, #0a2a34 100%);
   border: 1px solid var(--line);
 }
@@ -177,7 +177,65 @@ th { color: var(--cyan); letter-spacing: 0.08em; }
 .reel-actions .btn { padding: 4px 12px; font-size: 0.78rem; height: auto; line-height: 1.6; }
 .reel-danger { border-color: var(--blood) !important; color: #ff4d6d !important; }
 .reel-danger:hover { background: var(--blood) !important; color: #fff !important; box-shadow: 0 0 12px var(--blood) !important; }
-.reel-poster--img { width: 100%; height: 130px; object-fit: cover; display: block; }
+.reel-poster--img { display: block; object-fit: contain; background: #05090c; }
+.reel-zoom { display: block; cursor: zoom-in; }
+.reel-zoom:hover .reel-poster--img { box-shadow: 0 0 16px rgba(25, 227, 255, 0.35); }
 #reviewMessage:empty { display: none; }
 [hidden] { display: none !important; }
 .reel-form ::placeholder { color: #3d5c63; opacity: 1; }
+
+/* Cartelera 3D: profundidad en el espacio, tiempo en la barrida de luz del proyector */
+.reel-stage { margin: 0 0 28px; padding: 6px 16px 18px; background: rgba(5, 9, 12, 0.72); border: 1px solid var(--line); }
+.reel-viewport { position: relative; height: 400px; perspective: 1300px; overflow: hidden; touch-action: pan-y; }
+.reel-track { position: absolute; inset: 0; transform-style: preserve-3d; }
+.reel-slide {
+  --w: min(215px, 52vw);
+  position: absolute; left: 50%; top: 22px;
+  width: var(--w); margin-left: calc(var(--w) / -2); aspect-ratio: 2 / 3;
+  padding: 0; overflow: hidden; cursor: pointer;
+  background: #05090c; border: 1px solid var(--line);
+  box-shadow: 0 22px 30px -12px rgba(0, 0, 0, 0.85);
+  transform: translateX(var(--x, 0)) translateZ(var(--z, 0)) rotateY(var(--r, 0deg));
+  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease-out;
+}
+.reel-slide.is-active {
+  border-color: var(--cyan);
+  transform: translateX(var(--x, 0)) translateZ(var(--z, 0)) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+}
+.reel-slide:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+.reel-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.reel-slide-title {
+  display: flex; align-items: center; justify-content: center; height: 100%; padding: 16px; text-align: center;
+  font-family: 'Metal Mania', cursive; font-size: 1.7rem; line-height: 1.1; color: var(--text);
+  background: linear-gradient(160deg, #3a0612 0%, #0a2a34 100%);
+}
+/* barrida de luz: la película "avanza" al cambiar de fotograma */
+.reel-slide::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(201, 231, 236, 0.38) 50%, transparent 62%);
+}
+.reel-slide.flash::after { animation: gate 700ms cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes gate { from { opacity: 1; transform: translateX(-110%); } to { opacity: 0; transform: translateX(110%); } }
+
+.reel-controls { display: flex; justify-content: center; gap: 10px; margin: 10px 0 16px; }
+.reel-controls .btn { padding: 6px 16px; }
+.reel-caption { max-width: 68ch; margin: 0 auto; text-align: center; }
+.reel-caption h3 { font-family: 'Metal Mania', cursive; font-size: 1.7rem; color: var(--text); margin: 0 0 4px; }
+.reel-caption .reel-meta, .reel-caption .reel-tags { font-size: 0.85rem; }
+.reel-caption-text {
+  margin: 10px 0; line-height: 1.6; color: var(--text);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.reel-caption-text.is-open { display: block; }
+
+@media (max-width: 600px) {
+  .reel-viewport { height: 340px; }
+}
+/* movimiento reducido: sin giro, profundidad, barrida ni autoavance; las vecinas siguen visibles en fila */
+@media (prefers-reduced-motion: reduce) {
+  .reel-slide, .reel-slide.is-active {
+    transform: translateX(var(--x, 0)) !important;
+    transition: opacity 200ms linear;
+  }
+  .reel-slide.flash::after { animation: none; }
+}
