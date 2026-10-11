@@ -21,6 +21,9 @@ Extra: `GET /api/users/me` con token de usuario → 200 ![02b](img/02b-me-usuari
 | 08 | `/health` → `{"ok":true}` | ![08](img/08-render-health.png) |
 | 09 | `/signIn` | ![09](img/09-render-signin-web.png) |
 | 10 | Dashboard del admin | ![10](img/10-render-admin-dashboard.png) |
+| 17 | Dashboard de usuario: cartelera 3D | ![17](img/17-dashboard-cartelera.png) |
+| 18 | CRUD de reseñas: editar y eliminar (panel admin) | ![18](img/18-admin-crud-resenas.png) |
+| 19 | Catálogo del usuario (sin controles de edición) | ![19](img/19-dashboard-catalogo-usuario.png) |
 
 ### GitHub Actions y Render
 | N.º | Evidencia | Captura |
