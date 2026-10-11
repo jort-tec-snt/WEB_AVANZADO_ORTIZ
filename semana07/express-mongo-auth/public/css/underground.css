@@ -12,7 +12,11 @@
 }
 
 body {
-  background: var(--bg) radial-gradient(ellipse at top, #0a2028 0%, var(--bg) 60%) fixed;
+  background:
+    radial-gradient(ellipse at center, rgba(4, 7, 10, 0.05) 0%, rgba(4, 7, 10, 0.7) 100%),
+    linear-gradient(rgba(4, 7, 10, 0.2), rgba(4, 7, 10, 0.5)),
+    url('../img/fondo-cine.webp') center / cover no-repeat fixed,
+    var(--bg);
   color: var(--text);
   font-family: 'Share Tech Mono', 'Consolas', monospace;
 }
@@ -57,7 +61,8 @@ a { color: var(--cyan); }
 
 /* Tarjetas y títulos */
 .auth-card, .card {
-  background: var(--panel) !important;
+  background: rgba(10, 19, 23, 0.88) !important;
+  backdrop-filter: blur(2px);
   border: 1px solid var(--line);
   border-radius: 2px;
   box-shadow: 0 0 24px rgba(25, 227, 255, 0.08), inset 0 0 40px rgba(0, 0, 0, 0.5);
