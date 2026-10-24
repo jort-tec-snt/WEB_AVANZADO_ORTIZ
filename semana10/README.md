@@ -2,7 +2,7 @@
 
 Laboratorio 10 de Desarrollo de Aplicaciones Web Avanzado (DAWA), Tecsup. El proyecto está en [`next-ssg-isr-app/`](next-ssg-isr-app/).
 
-Aplicación desplegada: _pendiente_
+Aplicación desplegada: <https://next-ssg-isr-app-one.vercel.app>
 
 ## Qué se desarrolló
 
