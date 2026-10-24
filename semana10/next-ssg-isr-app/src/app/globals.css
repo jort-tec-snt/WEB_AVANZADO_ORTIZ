@@ -33,6 +33,19 @@
   --color-type-ghost: #5d4c8f;
   --color-type-steel: #7d8b97;
 
+  /* Rick and Morty: "expediente interdimensional" — vacío, casco y verde portal */
+  --color-void: #0b1210;
+  --color-void-raised: #121c19;
+  --color-hull: #26352f;
+  --color-hull-bright: #3a4d45;
+  --color-haze: #8fa39a;
+  --color-glow: #e7f0ea;
+  --color-portal: #97ce4c;
+  --color-portal-deep: #5f8f22;
+  --color-alive: #55cc44;
+  --color-dead: #e5484d;
+  --color-unknown: #8c96a0;
+
   --radius-plate: 6px;
 }
 
@@ -47,7 +60,17 @@ body {
   background-size: 12px 12px;
 }
 
+/* Evita que la página salte cuando aparece o desaparece la barra de scroll */
+html {
+  scrollbar-gutter: stable;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-dex);
   outline-offset: 3px;
+}
+
+/* En la sección Rick and Morty el foco usa el verde portal */
+.theme-portal :focus-visible {
+  outline-color: var(--color-portal);
 }
