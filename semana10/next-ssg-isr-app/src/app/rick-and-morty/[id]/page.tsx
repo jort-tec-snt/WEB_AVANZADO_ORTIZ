@@ -3,6 +3,8 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Character, CharacterListResponse, Episode } from "@/types/rick-and-morty";
+import { TiltCard } from "@/components/ui/tilt-card";
+import { EncryptedText } from "@/components/ui/encrypted-text";
 import {
   RM_API,
   TEN_DAYS,
@@ -95,17 +97,22 @@ export default async function CharacterDetail({
 
         <div className="grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
           <div>
-            <div className="overflow-hidden rounded-plate border border-hull">
-              <Image
-                src={character.image}
-                alt={character.name}
-                width={300}
-                height={300}
-                sizes="(min-width: 768px) 380px, 100vw"
-                className="aspect-square w-full object-cover"
-                preload // Imagen principal de la página: se precarga
-              />
-            </div>
+            {/* 3D Card + anillo de portal que gira alrededor del retrato */}
+            <TiltCard maxTilt={8}>
+              <div className="portal-ring isolate">
+                <div className="overflow-hidden rounded-[5px] bg-void">
+                  <Image
+                    src={character.image}
+                    alt={character.name}
+                    width={300}
+                    height={300}
+                    className="aspect-square w-full object-cover"
+                    loading="eager" // Imagen principal (LCP): se carga de inmediato
+                    unoptimized // Igual que en las tarjetas: se pide directo a la API
+                  />
+                </div>
+              </div>
+            </TiltCard>
             <p className="mt-3 flex items-center gap-2 rounded-plate border border-hull bg-void-raised px-3 py-2 text-sm">
               <span aria-hidden className={`size-2.5 rounded-full ${statusDot[character.status]}`} />
               <span className="font-semibold">{statusLabel[character.status]}</span>
@@ -118,7 +125,8 @@ export default async function CharacterDetail({
               Expediente #{character.id.toString().padStart(3, "0")}
             </p>
             <h1 className="mt-2 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-              {character.name}
+              {/* Encrypted Text: el nombre se "descifra" al abrir el expediente */}
+              <EncryptedText text={character.name} encryptedClassName="text-portal/70" />
             </h1>
 
             <dl className="mt-6 grid gap-px overflow-hidden rounded-plate border border-hull bg-hull sm:grid-cols-2">

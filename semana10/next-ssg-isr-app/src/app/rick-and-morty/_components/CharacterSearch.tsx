@@ -3,7 +3,18 @@
 import { useEffect, useState } from "react";
 import { Character, CharacterListResponse } from "@/types/rick-and-morty";
 import { RM_API, genderLabel, statusLabel } from "@/lib/rick-and-morty";
+import { SpotlightGrid } from "@/components/ui/spotlight-grid";
+import { AnimatedPlaceholderInput } from "@/components/ui/animated-placeholder-input";
 import CharacterCard from "./CharacterCard";
+
+const NAME_PLACEHOLDERS = [
+  "Rick Sanchez",
+  "Birdperson",
+  "Mr. Meeseeks",
+  "Pickle Rick",
+  "Squanchy",
+  "Evil Morty",
+];
 
 interface Filters {
   name: string;
@@ -96,72 +107,73 @@ export default function CharacterSearch() {
 
   return (
     <div>
-      <form
-        role="search"
-        onSubmit={(e) => e.preventDefault()}
-        className="grid gap-4 rounded-plate border border-hull bg-void-raised p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-[2fr_1fr_1fr_1fr_auto] lg:items-end"
-      >
-        <label className="grid gap-1.5">
-          <span className="font-mono text-[11px] uppercase tracking-widest text-haze">Nombre</span>
-          <input
-            type="search"
-            value={filters.name}
-            onChange={(e) => update("name", e.target.value)}
-            placeholder="Rick, Morty, Birdperson…"
-            autoComplete="off"
-            className={fieldClass}
-          />
-        </label>
-        <label className="grid gap-1.5">
-          <span className="font-mono text-[11px] uppercase tracking-widest text-haze">Estado</span>
-          <select
-            value={filters.status}
-            onChange={(e) => update("status", e.target.value)}
-            className={fieldClass}
-          >
-            <option value="">Todos</option>
-            {Object.entries(statusLabel).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="grid gap-1.5">
-          <span className="font-mono text-[11px] uppercase tracking-widest text-haze">Tipo</span>
-          <input
-            type="text"
-            value={filters.type}
-            onChange={(e) => update("type", e.target.value)}
-            placeholder="Parasite, Clone…"
-            autoComplete="off"
-            className={fieldClass}
-          />
-        </label>
-        <label className="grid gap-1.5">
-          <span className="font-mono text-[11px] uppercase tracking-widest text-haze">Género</span>
-          <select
-            value={filters.gender}
-            onChange={(e) => update("gender", e.target.value)}
-            className={fieldClass}
-          >
-            <option value="">Todos</option>
-            {Object.entries(genderLabel).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button
-          type="button"
-          onClick={() => setFilters(EMPTY_FILTERS)}
-          disabled={!hasFilters}
-          className="rounded-plate border border-hull-bright px-4 py-2.5 font-semibold transition hover:border-portal hover:text-portal disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-hull-bright disabled:hover:text-glow"
+      {/* El borde se convierte en un portal que gira mientras se busca */}
+      <div className="portal-ring-focus">
+        <form
+          role="search"
+          onSubmit={(e) => e.preventDefault()}
+          className="grid gap-4 rounded-[5px] bg-void-raised p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-[2fr_1fr_1fr_1fr_auto] lg:items-end"
         >
-          Limpiar
-        </button>
-      </form>
+          <label className="grid gap-1.5">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-haze">Nombre</span>
+            <AnimatedPlaceholderInput
+              value={filters.name}
+              onChange={(value) => update("name", value)}
+              placeholders={NAME_PLACEHOLDERS}
+              className={fieldClass}
+            />
+          </label>
+          <label className="grid gap-1.5">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-haze">Estado</span>
+            <select
+              value={filters.status}
+              onChange={(e) => update("status", e.target.value)}
+              className={fieldClass}
+            >
+              <option value="">Todos</option>
+              {Object.entries(statusLabel).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-1.5">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-haze">Tipo</span>
+            <input
+              type="text"
+              value={filters.type}
+              onChange={(e) => update("type", e.target.value)}
+              placeholder="Parasite, Clone…"
+              autoComplete="off"
+              className={fieldClass}
+            />
+          </label>
+          <label className="grid gap-1.5">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-haze">Género</span>
+            <select
+              value={filters.gender}
+              onChange={(e) => update("gender", e.target.value)}
+              className={fieldClass}
+            >
+              <option value="">Todos</option>
+              {Object.entries(genderLabel).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="button"
+            onClick={() => setFilters(EMPTY_FILTERS)}
+            disabled={!hasFilters}
+            className="rounded-plate border border-hull-bright px-4 py-2.5 font-semibold transition hover:border-portal hover:text-portal disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-hull-bright disabled:hover:text-glow"
+          >
+            Limpiar
+          </button>
+        </form>
+      </div>
 
       <p aria-live="polite" className="mt-6 mb-4 font-mono text-xs uppercase tracking-widest text-haze">
         {loading
@@ -184,7 +196,7 @@ export default function CharacterSearch() {
         </div>
       )}
 
-      <ul
+      <SpotlightGrid
         className={`grid grid-cols-2 gap-4 transition-opacity sm:grid-cols-3 lg:grid-cols-5 ${loading ? "opacity-40" : ""}`}
       >
         {results.map((character) => (
@@ -192,7 +204,7 @@ export default function CharacterSearch() {
             <CharacterCard character={character} />
           </li>
         ))}
-      </ul>
+      </SpotlightGrid>
 
       {nextUrl && !loading && (
         <div className="mt-8 flex justify-center">

@@ -17,7 +17,23 @@ Aplicación desplegada: _pendiente_
 
 Cada sección tiene su propio `error.tsx` y `not-found.tsx`.
 
-Stack: Next.js 16 (App Router, Turbopack), React 19, TypeScript, Tailwind CSS 4, react-icons y pnpm. APIs: [PokeAPI](https://pokeapi.co) y [Rick and Morty API](https://rickandmortyapi.com).
+Stack: Next.js 16 (App Router, Turbopack), React 19, TypeScript, Tailwind CSS 4, react-icons, motion, simplex-noise y pnpm. APIs: [PokeAPI](https://pokeapi.co) y [Rick and Morty API](https://rickandmortyapi.com).
+
+## Diseño e interacciones
+
+Los efectos visuales se basan en componentes de [Aceternity UI](https://ui.aceternity.com/components), adaptados en `next-ssg-isr-app/src/components/ui/`:
+
+| Componente | Dónde | Adaptación |
+|---|---|---|
+| Vortex | Portada y encabezado de `/rick-and-morty` | Partículas en verde portal; el canvas toma el tamaño de su contenedor y es transparente |
+| Card Spotlight | Tarjetas de personajes | Versión ligera con CSS: un solo listener en la grilla en lugar de un canvas de three.js por tarjeta |
+| 3D Card Effect | Retrato del personaje e ilustración del Pokémon | La imagen se inclina siguiendo al puntero |
+| Moving Border | Retrato del personaje y formulario de búsqueda | Anillo cónico que gira como un portal (en el formulario, solo al enfocarlo) |
+| Encrypted Text | Nombre del personaje en la ficha | El servidor entrega el nombre real y el efecto de descifrado corre solo en el navegador (evita errores de hidratación) |
+| Placeholders And Vanish Input | Campo "Nombre" de la búsqueda | Ejemplos de nombres que rotan con animación |
+| Glare Card | Tarjetas de la Pokédex | Brillo holográfico de carta coleccionable, ajustado para fondo claro |
+
+Si el sistema tiene activado "reducir movimiento", se desactivan el giro, la inclinación, el vortex y el descifrado; los placeholders solo cambian con un fundido.
 
 ## Cómo ejecutarlo
 
@@ -44,7 +60,8 @@ En el build (`pnpm build`), `○` marca las páginas estáticas, `●` las gener
 
 - **`cacheComponents` desactivado.** El proyecto se creó con `cacheComponents: true`. Con esa opción, `revalidate` en las rutas da error y las opciones de caché de `fetch` se reemplazan por `'use cache'` y `cacheLife()`. Como el laboratorio evalúa `revalidate` y `generateStaticParams`, se usó el modelo de caché clásico.
 - **HTTP 429 de la API de Rick and Morty.** Al generar 826 fichas en paralelo, cada una pedía `/character/{id}` y sus episodios: más de 1600 peticiones en ráfaga, y la API respondía `429 Too Many Requests`. Se resolvió con el endpoint múltiple (`/character/1,2,…,826` y `/episode/1,…,51`): el build hace unas 4 peticiones y todas las fichas reutilizan la respuesta guardada en la caché de datos.
-- **Next.js 16.** `priority` en `next/image` está obsoleto (se usan `loading="lazy"` y `preload`), `error.tsx` recibe `retry` en lugar de `reset`, y `params` es una promesa tipada con `PageProps`.
+- **HTTP 429 en las imágenes.** El optimizador de `next/image` descargaba los avatares desde el servidor y, al mostrar muchos a la vez, la API también lo limitaba. Los avatares ya son JPEG de 300×300, así que se marcaron `unoptimized`: el navegador los pide directamente a la API y se mantiene la carga diferida con `loading="lazy"`.
+- **Next.js 16.** `priority` en `next/image` está obsoleto (se usa `loading="lazy"` en las listas y `loading="eager"` en la imagen principal de cada ficha), `error.tsx` recibe `retry` en lugar de `reset`, y `params` es una promesa tipada con `PageProps`.
 
 ## Ejercicio 1: Pokédex
 

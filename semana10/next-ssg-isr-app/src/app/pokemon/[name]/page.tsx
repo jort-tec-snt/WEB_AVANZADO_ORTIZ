@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Pokemon, PokemonListResponse } from "@/types/pokemon";
+import { TiltCard, TiltLayer } from "@/components/ui/tilt-card";
 
 async function getPokemon(name: string): Promise<Pokemon> {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`, {
@@ -87,14 +88,19 @@ export default async function PokemonDetail({
 
         <div className="grid md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
           <div className="plate-dots flex items-center justify-center border-b-2 border-ink bg-paper-deep/60 p-8 md:border-r-2 md:border-b-0">
-            <Image
-              width={256}
-              height={256}
-              src={pokemon.sprites.other["official-artwork"].front_default}
-              alt={pokemon.name}
-              className="size-56 drop-shadow-[0_8px_0_rgba(29,27,24,0.15)] sm:size-64"
-              preload // Imagen principal de la página: se precarga
-            />
+            {/* 3D Card: la ilustración se inclina siguiendo al puntero */}
+            <TiltCard maxTilt={14}>
+              <TiltLayer depth={60}>
+                <Image
+                  width={256}
+                  height={256}
+                  src={pokemon.sprites.other["official-artwork"].front_default}
+                  alt={pokemon.name}
+                  className="size-56 drop-shadow-[0_10px_0_rgba(29,27,24,0.15)] sm:size-64"
+                  loading="eager" // Imagen principal (LCP): se carga de inmediato
+                />
+              </TiltLayer>
+            </TiltCard>
           </div>
 
           <div className="space-y-8 p-6 sm:p-8">
@@ -119,7 +125,7 @@ export default async function PokemonDetail({
                 Estadísticas base
               </h2>
               <dl className="space-y-2.5">
-                {pokemon.stats.map((stat) => (
+                {pokemon.stats.map((stat, index) => (
                   <div
                     key={stat.stat.name}
                     className="grid grid-cols-[8.5rem_2.5rem_1fr] items-center gap-3"
@@ -132,8 +138,11 @@ export default async function PokemonDetail({
                     </dd>
                     <dd className="h-3 border-2 border-ink bg-paper-deep">
                       <div
-                        className={`${mainType} h-full`}
-                        style={{ width: `${(stat.base_stat / MAX_BASE_STAT) * 100}%` }}
+                        className={`${mainType} bar-grow h-full`}
+                        style={{
+                          width: `${(stat.base_stat / MAX_BASE_STAT) * 100}%`,
+                          animationDelay: `${index * 70}ms`,
+                        }}
                       />
                     </dd>
                   </div>

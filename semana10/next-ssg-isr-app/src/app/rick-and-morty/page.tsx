@@ -1,5 +1,7 @@
 import { Character, CharacterListResponse } from "@/types/rick-and-morty";
 import { RM_API, statusLabel } from "@/lib/rick-and-morty";
+import { SpotlightGrid } from "@/components/ui/spotlight-grid";
+import { Vortex } from "@/components/ui/vortex";
 import CharacterCard from "./_components/CharacterCard";
 
 // SSG: `force-cache` guarda la respuesta en la caché de datos de Next.js.
@@ -30,7 +32,16 @@ export default async function CharactersPage() {
   return (
     <main className="px-4 py-10 sm:px-8">
       <div className="mx-auto max-w-6xl">
-        <header className="mb-10 grid gap-6 border-b border-hull pb-8 md:grid-cols-[1fr_auto] md:items-end">
+        <header className="relative isolate mb-10 grid gap-6 border-b border-hull pt-4 pb-8 md:grid-cols-[1fr_auto] md:items-end">
+          {/* Vortex: el encabezado se abre como un portal */}
+          <Vortex
+            className="-z-10 -mx-4 [mask-image:linear-gradient(90deg,transparent,black_45%,black_80%,transparent)] sm:-mx-8"
+            backgroundColor="transparent"
+            baseHue={78}
+            rangeHue={40}
+            particleCount={260}
+            rangeY={70}
+          />
           <div>
             <p className="font-mono text-[11px] uppercase tracking-widest text-portal">
               SSG · cache: force-cache
@@ -43,7 +54,7 @@ export default async function CharactersPage() {
               forma estática y se revalida cada 10 días.
             </p>
           </div>
-          <dl className="grid grid-cols-3 divide-x divide-hull rounded-plate border border-hull font-mono">
+          <dl className="grid grid-cols-3 divide-x divide-hull rounded-plate border border-hull bg-void/80 font-mono backdrop-blur-sm">
             <div className="px-4 py-3">
               <dt className="text-[11px] uppercase tracking-wide text-haze">Total</dt>
               <dd className="text-2xl font-bold">{characters.length}</dd>
@@ -59,13 +70,13 @@ export default async function CharactersPage() {
           </dl>
         </header>
 
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        <SpotlightGrid className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {characters.map((character) => (
             <li key={character.id}>
               <CharacterCard character={character} />
             </li>
           ))}
-        </ul>
+        </SpotlightGrid>
       </div>
     </main>
   );

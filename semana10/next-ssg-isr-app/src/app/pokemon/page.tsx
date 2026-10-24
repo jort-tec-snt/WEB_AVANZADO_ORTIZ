@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { IoMdList } from "react-icons/io";
 import { PokemonListResponse, SimplePokemon } from "@/types/pokemon";
+import { GlareCard } from "@/components/ui/glare-card";
 
 async function getPokemons(): Promise<SimplePokemon[]> {
   const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151", {
@@ -34,28 +35,28 @@ export default async function PokemonList() {
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {pokemons.map((pokemon) => (
             <li key={pokemon.name}>
-              <Link
-                href={`/pokemon/${pokemon.name}`}
-                className="group block rounded-plate border-2 border-rule bg-paper transition hover:-translate-y-1 hover:border-ink hover:shadow-[4px_4px_0_var(--color-ink)]"
-              >
-                <div className="plate-dots flex aspect-square items-center justify-center border-b-2 border-rule bg-paper-deep/60 p-4 transition-colors group-hover:border-ink">
-                  <Image
-                    width={100}
-                    height={100}
-                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemon.id}.svg`}
-                    alt={pokemon.name}
-                    className="size-24 sm:size-28"
-                    loading="lazy" // Lazy loading: la imagen se pide al acercarse al viewport
-                  />
-                </div>
-                <div className="flex items-baseline justify-between gap-2 px-3 py-2">
-                  <h2 className="truncate text-base font-bold capitalize sm:text-lg">
-                    {pokemon.name}
-                  </h2>
-                  <span className="font-mono text-xs text-ink-soft transition-colors group-hover:text-dex">
-                    #{pokemon.id.toString().padStart(3, "0")}
-                  </span>
-                </div>
+              <Link href={`/pokemon/${pokemon.name}`} className="group block rounded-plate">
+                {/* Glare Card: brillo holográfico de carta coleccionable al pasar el puntero */}
+                <GlareCard tone="light" className="rounded-plate border-2 border-rule bg-paper transition-colors group-hover:border-ink">
+                  <div className="plate-dots flex aspect-square items-center justify-center border-b-2 border-rule bg-paper-deep/60 p-4 transition-colors group-hover:border-ink">
+                    <Image
+                      width={100}
+                      height={100}
+                      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemon.id}.svg`}
+                      alt={pokemon.name}
+                      className="size-24 transition-transform duration-300 group-hover:scale-110 sm:size-28 motion-reduce:transition-none"
+                      loading="lazy" // Lazy loading: la imagen se pide al acercarse al viewport
+                    />
+                  </div>
+                  <div className="flex items-baseline justify-between gap-2 px-3 py-2">
+                    <h2 className="truncate text-base font-bold capitalize sm:text-lg">
+                      {pokemon.name}
+                    </h2>
+                    <span className="font-mono text-xs text-ink-soft transition-colors group-hover:text-dex">
+                      #{pokemon.id.toString().padStart(3, "0")}
+                    </span>
+                  </div>
+                </GlareCard>
               </Link>
             </li>
           ))}

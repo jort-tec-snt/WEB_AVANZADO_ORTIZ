@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Vortex } from "@/components/ui/vortex";
 
 const sections = [
   {
@@ -11,6 +12,7 @@ const sections = [
       { path: "/pokemon/[name]", strategy: "SSG + ISR · 151 rutas" },
     ],
     cta: "Abrir la Pokédex",
+    backdrop: "dots",
     theme: {
       panel: "bg-paper text-ink",
       eyebrow: "text-dex",
@@ -30,6 +32,7 @@ const sections = [
       { path: "/rick-and-morty/search", strategy: "CSR" },
     ],
     cta: "Abrir el expediente",
+    backdrop: "vortex",
     theme: {
       panel: "theme-portal bg-void text-glow",
       eyebrow: "text-portal",
@@ -47,8 +50,27 @@ export default function Home() {
         <Link
           key={section.href}
           href={section.href}
-          className={`group flex flex-col justify-between gap-12 px-6 py-10 sm:px-12 sm:py-14 ${section.theme.panel}`}
+          className={`group relative isolate flex flex-col justify-between gap-12 overflow-hidden px-6 py-10 sm:px-12 sm:py-14 ${section.theme.panel}`}
         >
+          {section.backdrop === "vortex" && (
+            <>
+              {/* Vortex: partículas en verde portal, como el portal de la serie */}
+              <Vortex
+                className="-z-10"
+                backgroundColor="transparent"
+                baseHue={78}
+                rangeHue={40}
+                particleCount={450}
+                rangeY={260}
+              />
+              {/* Velo para que el texto se lea sobre las partículas */}
+              <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,var(--color-void)_0%,color-mix(in_srgb,var(--color-void)_75%,transparent)_45%,transparent_100%)]" />
+            </>
+          )}
+          {section.backdrop === "dots" && (
+            <div aria-hidden className="plate-dots absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(ellipse_at_70%_50%,black,transparent_70%)]" />
+          )}
+
           <p className={`font-mono text-[11px] uppercase tracking-widest ${section.theme.muted}`}>
             Laboratorio 10 · Next.js SSG e ISR
           </p>

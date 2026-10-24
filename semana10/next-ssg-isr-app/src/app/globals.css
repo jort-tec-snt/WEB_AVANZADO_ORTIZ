@@ -70,6 +70,112 @@ html {
   outline-offset: 3px;
 }
 
+/* Foco radial que sigue al puntero (ver components/ui/spotlight-grid.tsx) */
+.spotlight {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  background: radial-gradient(
+    260px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    color-mix(in srgb, var(--color-portal) 32%, transparent),
+    transparent 75%
+  );
+  mix-blend-mode: screen;
+}
+
+[data-spotlight]:hover .spotlight {
+  opacity: 1;
+}
+
+/* Anillo de portal: borde cónico que gira (inspirado en Aceternity "Moving Border").
+   El elemento lleva padding = grosor del anillo y su hijo tapa el centro. */
+@property --portal-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes portal-spin {
+  to {
+    --portal-angle: 360deg;
+  }
+}
+
+.portal-ring {
+  position: relative;
+  padding: 2px;
+  border-radius: var(--radius-plate);
+  background: conic-gradient(
+    from var(--portal-angle),
+    var(--color-portal),
+    transparent 25%,
+    var(--color-portal-deep) 50%,
+    transparent 75%,
+    var(--color-portal)
+  );
+  animation: portal-spin 4s linear infinite;
+}
+
+.portal-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(18px);
+  opacity: 0.55;
+}
+
+/* Variante que solo se enciende al enfocar algo dentro (formulario de búsqueda) */
+.portal-ring-focus {
+  position: relative;
+  padding: 1px;
+  border-radius: var(--radius-plate);
+  background: var(--color-hull);
+  transition: background 300ms ease;
+}
+
+.portal-ring-focus:focus-within {
+  background: conic-gradient(
+    from var(--portal-angle),
+    var(--color-portal),
+    transparent 30%,
+    var(--color-portal-deep) 55%,
+    transparent 80%,
+    var(--color-portal)
+  );
+  animation: portal-spin 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-ring,
+  .portal-ring-focus:focus-within {
+    animation: none;
+  }
+}
+
+/* Barras de estadísticas que crecen al cargar la ficha */
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.bar-grow {
+  transform-origin: left;
+  animation: bar-grow 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow {
+    animation: none;
+  }
+}
+
 /* En la sección Rick and Morty el foco usa el verde portal */
 .theme-portal :focus-visible {
   outline-color: var(--color-portal);
