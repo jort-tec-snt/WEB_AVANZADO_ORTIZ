@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/* Tokens: "registro de campo" — papel crema, tinta y el rojo de la Pokédex */
+@theme inline {
+  --font-sans: var(--font-grotesk);
+  --font-mono: var(--font-jetbrains);
+
+  --color-paper: #f4f0e6;
+  --color-paper-deep: #e9e2d0;
+  --color-ink: #1d1b18;
+  --color-ink-soft: #5c574d;
+  --color-rule: #cfc6b0;
+  --color-dex: #d1263b;
+  --color-dex-dark: #9e1729;
+
+  /* Colores por tipo Pokémon */
+  --color-type-normal: #9a9585;
+  --color-type-fire: #e4572e;
+  --color-type-water: #2f7fd0;
+  --color-type-grass: #3f9b4b;
+  --color-type-electric: #e8b420;
+  --color-type-psychic: #e0457b;
+  --color-type-ice: #4fb7c4;
+  --color-type-dragon: #4c3fb5;
+  --color-type-dark: #3b342e;
+  --color-type-fairy: #d987b4;
+  --color-type-fighting: #b4442b;
+  --color-type-flying: #7f8fd6;
+  --color-type-poison: #8e4bb0;
+  --color-type-ground: #c49a4a;
+  --color-type-rock: #8f7a3c;
+  --color-type-bug: #8aa12b;
+  --color-type-ghost: #5d4c8f;
+  --color-type-steel: #7d8b97;
+
+  --radius-plate: 6px;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* Trama de puntos para las placas donde se apoyan los sprites */
+.plate-dots {
+  background-image: radial-gradient(var(--color-rule) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-dex);
+  outline-offset: 3px;
+}
