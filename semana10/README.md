@@ -63,30 +63,38 @@ En el build (`pnpm build`), `○` marca las páginas estáticas, `●` las gener
 - **HTTP 429 en las imágenes.** El optimizador de `next/image` descargaba los avatares desde el servidor y, al mostrar muchos a la vez, la API también lo limitaba. Los avatares ya son JPEG de 300×300, así que se marcaron `unoptimized`: el navegador los pide directamente a la API y se mantiene la carga diferida con `loading="lazy"`.
 - **Next.js 16.** `priority` en `next/image` está obsoleto (se usa `loading="lazy"` en las listas y `loading="eager"` en la imagen principal de cada ficha), `error.tsx` recibe `retry` en lugar de `reset`, y `params` es una promesa tipada con `PageProps`.
 
-## Ejercicio 1: Pokédex
+## Capturas
+
+Tomadas con el diseño final (componentes de Aceternity UI incluidos).
+
+### Portada
+
+![Portada con el efecto Vortex](capturas/00-portada.jpg)
+
+### Ejercicio 1: Pokédex
 
 | Lista (`/pokemon`) | Ficha (`/pokemon/[name]`) |
 |---|---|
-| ![Lista de Pokémon](capturas/01-pokemon-lista.jpg) | ![Ficha de Pikachu](capturas/04-pokemon-detalle.jpg) |
+| ![Lista de Pokémon con Glare Card](capturas/01-pokemon-lista.jpg) | ![Ficha de Pikachu con inclinación 3D](capturas/04-pokemon-detalle.jpg) |
 
 | Error Handler | NotFound Handler |
 |---|---|
 | ![Error](capturas/02-pokemon-error.jpg) | ![404](capturas/03-pokemon-not-found.jpg) |
 
-## Tarea: Rick and Morty
+### Tarea: Rick and Morty
 
 | Lista (`/rick-and-morty`) | Ficha (`/rick-and-morty/[id]`) |
 |---|---|
-| ![Lista de personajes](capturas/06-rm-lista.jpg) | ![Ficha de Rick](capturas/07-rm-detalle.jpg) |
+| ![Lista de personajes con Vortex y Spotlight](capturas/06-rm-lista.jpg) | ![Ficha de Rick con Moving Border y Encrypted Text](capturas/07-rm-detalle.jpg) |
 
 | Búsqueda por nombre, estado y género | Búsqueda por tipo y estado |
 |---|---|
-| ![Búsqueda](capturas/09-rm-busqueda.jpg) | ![Búsqueda por tipo](capturas/10-rm-busqueda-tipo.jpg) |
+| ![Búsqueda con placeholders animados](capturas/09-rm-busqueda.jpg) | ![Búsqueda por tipo](capturas/10-rm-busqueda-tipo.jpg) |
 
 | Sin resultados | Personaje inexistente |
 |---|---|
 | ![Sin resultados](capturas/11-rm-sin-resultados.jpg) | ![404](capturas/08-rm-not-found.jpg) |
 
-## Build de producción
+### Build de producción
 
 ![pnpm build](capturas/12-build-final.png)
