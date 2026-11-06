@@ -48,39 +48,51 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ============================================================
+   Tema "Frutiger Aero": cielo aqua, verde hoja, vidrio y brillo.
+   Tokens en oklch. Matiz 215-235 = agua/cielo, 140-150 = hoja.
+   ============================================================ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --background: oklch(0.96 0.025 215);
+  --foreground: oklch(0.26 0.055 238);
+  --card: oklch(1 0 0 / 0.66);
+  --card-foreground: oklch(0.26 0.055 238);
+  --popover: oklch(0.99 0.008 215);
+  --popover-foreground: oklch(0.26 0.055 238);
+  --primary: oklch(0.6 0.145 228);
+  --primary-foreground: oklch(0.99 0.005 215);
+  --secondary: oklch(0.93 0.045 205);
+  --secondary-foreground: oklch(0.3 0.07 235);
+  --muted: oklch(0.945 0.03 210);
+  --muted-foreground: oklch(0.45 0.045 235);
+  --accent: oklch(0.92 0.085 150);
+  --accent-foreground: oklch(0.3 0.075 160);
+  --destructive: oklch(0.57 0.21 27);
+  --border: oklch(0.85 0.04 220);
+  --input: oklch(0.8 0.05 222);
+  --ring: oklch(0.68 0.14 215);
+  --chart-1: oklch(0.62 0.14 228);
+  --chart-2: oklch(0.72 0.18 145);
+  --chart-3: oklch(0.78 0.12 200);
+  --chart-4: oklch(0.82 0.15 120);
+  --chart-5: oklch(0.52 0.12 250);
+  --radius: 0.85rem;
+  --sidebar: oklch(0.98 0.012 215);
+  --sidebar-foreground: oklch(0.26 0.055 238);
+  --sidebar-primary: oklch(0.6 0.145 228);
+  --sidebar-primary-foreground: oklch(0.99 0.005 215);
+  --sidebar-accent: oklch(0.92 0.085 150);
+  --sidebar-accent-foreground: oklch(0.3 0.075 160);
+  --sidebar-border: oklch(0.85 0.04 220);
+  --sidebar-ring: oklch(0.68 0.14 215);
+
+  /* Tokens propios del tema */
+  --aero-sky-top: oklch(0.86 0.09 222);
+  --aero-sky-mid: oklch(0.94 0.04 205);
+  --aero-grass: oklch(0.9 0.1 140);
+  --aero-leaf: oklch(0.7 0.19 145);
+  --aero-leaf-deep: oklch(0.55 0.16 150);
+  --aero-glow: oklch(0.55 0.1 225 / 0.2);
 }
 
 .dark {
@@ -127,4 +139,78 @@
   html {
     @apply font-sans;
   }
+}
+
+/* ============================================================
+   Componentes del tema Aero (reutilizados por los componentes ui)
+   ============================================================ */
+@layer base {
+  body {
+    background-color: var(--aero-sky-mid);
+    background-image:
+      radial-gradient(circle at 12% 18%, oklch(1 0 0 / 0.75) 0 4rem, transparent 4.1rem),
+      radial-gradient(circle at 88% 12%, oklch(1 0 0 / 0.55) 0 6rem, transparent 6.1rem),
+      radial-gradient(ellipse 120% 45% at 50% 108%, var(--aero-grass) 0 55%, transparent 56%),
+      linear-gradient(180deg, var(--aero-sky-top) 0%, var(--aero-sky-mid) 48%, oklch(0.96 0.05 170) 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+  }
+}
+
+/* Panel de vidrio: cards y superficies principales */
+.aero-glass {
+  background: linear-gradient(180deg, oklch(1 0 0 / 0.82), oklch(1 0 0 / 0.55));
+  backdrop-filter: blur(14px) saturate(1.35);
+  border: 1px solid oklch(1 0 0 / 0.9);
+  box-shadow:
+    0 10px 30px var(--aero-glow),
+    inset 0 1px 0 oklch(1 0 0 / 0.95);
+}
+
+/* Botón brillante clásico: dos mitades con línea de reflejo */
+.aero-gloss {
+  color: var(--primary-foreground);
+  text-shadow: 0 -1px 0 oklch(0.35 0.1 235 / 0.45);
+  border: 1px solid oklch(0.48 0.12 235);
+  background: linear-gradient(
+    180deg,
+    oklch(0.8 0.11 215) 0%,
+    oklch(0.64 0.145 225) 48%,
+    oklch(0.55 0.15 235) 52%,
+    oklch(0.66 0.14 222) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.75),
+    0 3px 8px oklch(0.5 0.12 235 / 0.35);
+}
+.aero-gloss:hover { filter: brightness(1.08) saturate(1.1); }
+.aero-gloss:active { filter: brightness(0.95); box-shadow: inset 0 2px 4px oklch(0.3 0.1 235 / 0.4); }
+
+.aero-gloss-leaf {
+  color: oklch(0.99 0.01 140);
+  text-shadow: 0 -1px 0 oklch(0.3 0.1 150 / 0.45);
+  border: 1px solid oklch(0.45 0.13 150);
+  background: linear-gradient(
+    180deg,
+    oklch(0.85 0.15 140) 0%,
+    oklch(0.72 0.19 145) 48%,
+    oklch(0.6 0.17 150) 52%,
+    oklch(0.72 0.17 142) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.75),
+    0 3px 8px oklch(0.5 0.14 150 / 0.35);
+}
+.aero-gloss-leaf:hover { filter: brightness(1.07) saturate(1.1); }
+.aero-gloss-leaf:active { filter: brightness(0.95); box-shadow: inset 0 2px 4px oklch(0.3 0.1 150 / 0.4); }
+
+/* Burbuja decorativa (se puede reemplazar por imagen en public/aero) */
+.aero-bubble {
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 30% 28%, oklch(1 0 0 / 0.95) 0 8%, transparent 9%),
+    radial-gradient(circle at 50% 50%, oklch(1 0 0 / 0.08) 55%, oklch(0.85 0.1 215 / 0.45) 100%);
+  border: 1px solid oklch(1 0 0 / 0.7);
+  box-shadow: inset 0 -6px 14px oklch(0.8 0.1 215 / 0.35);
 }
