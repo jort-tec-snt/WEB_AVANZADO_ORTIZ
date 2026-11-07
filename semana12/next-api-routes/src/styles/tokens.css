@@ -1,0 +1,49 @@
+/* Tokens de diseno: Catalogo de fichas (biblioteca de autores peruanos) */
+:root {
+  /* color: papel, tinta y un unico acento rojo */
+  --paper: #f2ece0;
+  --paper-2: #e9e1d1;
+  --card: #faf6ec;
+  --ink: #1d1b17;
+  --ink-2: #4b463c;
+  --ink-3: #7b7466;
+  --rule: #cfc5b0;
+  --rule-strong: #1d1b17;
+  --accent: #b1281f;
+  --accent-ink: #fff7ee;
+  --accent-soft: #f0d9d3;
+  --ok: #2f6b3f;
+  --warn: #8a5a12;
+
+  /* tipografia */
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-body: var(--font-plex), system-ui, sans-serif;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: clamp(2.25rem, 5vw, 3.75rem);
+  --fs-hero: clamp(2.75rem, 7vw, 5.5rem);
+
+  /* espaciado (escala de 4) */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4.5rem;
+
+  /* bordes y radios: rectos, como una ficha */
+  --bw: 1px;
+  --bw-strong: 2px;
+  --radius: 2px;
+
+  /* anchos y capas */
+  --w-page: 72rem;
+  --w-narrow: 40rem;
+  --z-nav: 20;
+  --z-dialog: 50;
+}
