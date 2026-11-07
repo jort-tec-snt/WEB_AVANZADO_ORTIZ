@@ -160,7 +160,7 @@
 
 /* Panel de vidrio: cards y superficies principales */
 .aero-glass {
-  background: linear-gradient(180deg, oklch(1 0 0 / 0.82), oklch(1 0 0 / 0.55));
+  background: linear-gradient(180deg, oklch(1 0 0 / 0.9), oklch(1 0 0 / 0.72));
   backdrop-filter: blur(14px) saturate(1.35);
   border: 1px solid oklch(1 0 0 / 0.9);
   box-shadow:
@@ -213,4 +213,136 @@
     radial-gradient(circle at 50% 50%, oklch(1 0 0 / 0.08) 55%, oklch(0.85 0.1 215 / 0.45) 100%);
   border: 1px solid oklch(1 0 0 / 0.7);
   box-shadow: inset 0 -6px 14px oklch(0.8 0.1 215 / 0.35);
+}
+
+/* ============================================================
+   Escenario (fondo con paralaje + burbujas a dos profundidades)
+   ============================================================ */
+.aero-stage { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; --px: 0; --py: 0; }
+.aero-sky {
+  position: absolute; inset: -4%;
+  background: url("/aero/bg-sky.webp") center bottom / cover no-repeat;
+  transform: translate3d(calc(var(--px) * -10px), calc(var(--py) * -7px), 0);
+  transition: transform 0.5s ease-out;
+}
+.aero-sun {
+  position: absolute; left: 50%; top: -18%; width: 90vmax; height: 90vmax; translate: -50% 0;
+  background: radial-gradient(circle, oklch(1 0.1 100 / 0.5) 0%, transparent 55%);
+  mix-blend-mode: soft-light;
+}
+.aero-layer {
+  position: absolute; inset: 0;
+  transition: transform 0.6s ease-out;
+}
+.aero-layer--far  { transform: translate3d(calc(var(--px) * 14px), calc(var(--py) * 10px), 0); opacity: 0.5; }
+.aero-layer--near { transform: translate3d(calc(var(--px) * 34px), calc(var(--py) * 24px), 0); opacity: 0.8; }
+.aero-drift {
+  position: absolute; background: url("/aero/bubbles.webp") center / contain no-repeat;
+}
+.aero-drift--a { left: -6vw;  bottom: -10vh; width: 46vw; height: 80vh; }
+.aero-drift--b { right: -8vw; top: -4vh;     width: 42vw; height: 74vh; transform: scaleX(-1); }
+
+/* ============================================================
+   3D: inclinación, brillo que sigue al puntero y elementos elevados
+   ============================================================ */
+.aero-tilt-wrap { perspective: 950px; position: relative; }
+.aero-tilt {
+  position: relative; transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+.aero-tilt[data-active] { transition-duration: 0.08s; }
+.aero-glare {
+  position: absolute; inset: 0; border-radius: var(--radius-xl); pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), oklch(1 0 0 / 0.55), transparent 48%);
+  mix-blend-mode: soft-light; transition: opacity 0.25s; transform: translateZ(1px);
+}
+.aero-tilt[data-active] .aero-glare { opacity: 1; }
+.aero-pop { transform: translateZ(54px); }
+
+.aero-orb { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 14px 12px oklch(0.45 0.1 230 / 0.35)); }
+.aero-stat { padding-block: 1.1rem; }
+.aero-stat__value { font-size: 2.35rem; line-height: 1.05; font-weight: 700; color: var(--foreground); letter-spacing: -0.02em; }
+.aero-stat__orb { position: absolute; right: -0.55rem; top: -0.9rem; }
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.aero-hero { position: relative; --hx: 0; --hy: 0; margin-bottom: 1.75rem; }
+.aero-hero__clip {
+  position: relative; overflow: hidden; border-radius: 1.6rem; min-height: 15rem;
+  border: 1px solid oklch(1 0 0 / 0.85);
+  box-shadow: 0 22px 50px var(--aero-glow), inset 0 1px 0 oklch(1 0 0 / 0.9);
+}
+.aero-hero__clip::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, oklch(0.32 0.1 235 / 0.62) 0%, oklch(0.32 0.1 235 / 0.28) 48%, transparent 78%);
+}
+.aero-hero__water {
+  position: absolute; inset: -6%;
+  background: url("/aero/hero-water.webp") center / cover no-repeat;
+  transform: translate3d(calc(var(--hx) * -14px), calc(var(--hy) * -8px), 0) scale(1.05);
+  transition: transform 0.35s ease-out;
+}
+.aero-hero__shine {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, oklch(1 0 0 / 0.38) 50%, transparent 62%);
+  background-size: 260% 100%; background-position: 140% 0;
+}
+.aero-hero__body { position: relative; z-index: 2; padding: clamp(1.5rem, 4vw, 2.75rem); max-width: 40rem; }
+.aero-hero__eyebrow {
+  display: inline-block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+  color: oklch(0.99 0.01 215); padding: 0.28rem 0.7rem; border-radius: 999px;
+  background: oklch(0.35 0.1 230 / 0.35); backdrop-filter: blur(6px); border: 1px solid oklch(1 0 0 / 0.5);
+}
+.aero-hero__title {
+  margin-top: 0.8rem; font-size: clamp(2.2rem, 5.6vw, 3.9rem); line-height: 1; font-weight: 900; letter-spacing: -0.03em; color: #fff;
+  text-shadow: 0 2px 0 oklch(0.45 0.12 230 / 0.55), 0 10px 28px oklch(0.3 0.1 235 / 0.5);
+}
+.aero-hero__subtitle { margin-top: 0.7rem; max-width: 32rem; font-size: 1.02rem; font-weight: 600; color: oklch(0.99 0.01 215); text-shadow: 0 1px 12px oklch(0.3 0.1 235 / 0.55); }
+.aero-hero__actions { margin-top: 1.3rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.aero-hero__leaf {
+  position: absolute; right: clamp(-1rem, 2vw, 2rem); top: -2.2rem; width: clamp(9rem, 22vw, 16rem); height: auto; pointer-events: none;
+  filter: drop-shadow(0 22px 16px oklch(0.3 0.1 160 / 0.4));
+  transform: translate3d(calc(var(--hx) * 22px), calc(var(--hy) * 14px), 0) rotate(calc(var(--hx) * 4deg));
+  transition: transform 0.35s ease-out;
+}
+
+/* ============================================================
+   Pestañas: barra de vidrio con pestaña activa brillante
+   ============================================================ */
+[data-slot="tabs-list"] { background: transparent; }
+[data-slot="tabs-trigger"] { font-weight: 700; transition: filter 0.2s, color 0.2s; }
+[data-slot="tabs-trigger"][data-state="active"] {
+  color: var(--primary-foreground); text-shadow: 0 -1px 0 oklch(0.35 0.1 235 / 0.45);
+  background: linear-gradient(180deg, oklch(0.8 0.11 215), oklch(0.64 0.145 225) 48%, oklch(0.55 0.15 235) 52%, oklch(0.66 0.14 222));
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.75), 0 3px 8px oklch(0.5 0.12 235 / 0.35);
+}
+
+/* ============================================================
+   Animaciones (solo si el sistema no pide reducir movimiento)
+   ============================================================ */
+@keyframes aero-float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-9px) rotate(2deg); } }
+@keyframes aero-drift-a { 0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); } 50% { transform: translate3d(2vw, -7vh, 0) rotate(4deg); } }
+@keyframes aero-drift-b { 0%, 100% { transform: scaleX(-1) translate3d(0, 0, 0) rotate(0deg); } 50% { transform: scaleX(-1) translate3d(-2vw, 6vh, 0) rotate(-3deg); } }
+@keyframes aero-sweep { 0% { background-position: 140% 0; } 55%, 100% { background-position: -60% 0; } }
+@keyframes aero-sun { 0%, 100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+@keyframes aero-rise { from { opacity: 0; transform: translateY(18px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes aero-leaf { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .aero-orb { animation: aero-float 5.5s ease-in-out infinite; }
+  .aero-drift--a { animation: aero-drift-a 26s ease-in-out infinite; }
+  .aero-drift--b { animation: aero-drift-b 32s ease-in-out infinite; }
+  .aero-hero__shine { animation: aero-sweep 7s ease-in-out infinite; }
+  .aero-sun { animation: aero-sun 9s ease-in-out infinite; }
+  .aero-hero__leaf { animation: aero-leaf 6s ease-in-out infinite; }
+  .aero-rise { animation: aero-rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .aero-rise:nth-child(2) { animation-delay: 0.08s; }
+  .aero-rise:nth-child(3) { animation-delay: 0.16s; }
+  .aero-rise:nth-child(4) { animation-delay: 0.24s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aero-tilt, .aero-sky, .aero-layer { transition: none; }
 }

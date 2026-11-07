@@ -7,27 +7,34 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ProjectForm } from "@/components/ProjectForm"
 import { TasksTable } from "@/components/TasksTable"
+import { Hero } from "@/components/aero/Hero"
+import { StatCard } from "@/components/dashboard/StatCard"
+import { useData } from "@/lib/data-context"
+
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
 export default function DashboardPage() {
+  const { projects, tasks, members } = useData()
+  const done = tasks.filter((t) => t.status === "Completado").length
+  const open = tasks.length - done
+  const urgent = tasks.filter((t) => t.priority === "Urgente" && t.status !== "Completado").length
+  const active = members.filter((m) => m.isActive).length
+  const recent = [...tasks].sort((a, b) => b.id.localeCompare(a.id)).slice(0, 4)
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
+    <div className="min-h-screen px-4 py-6 sm:px-8 sm:py-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">
-            Dashboard de Proyectos
-          </h1>
-          <p className="text-slate-600">
-            Gestiona tus proyectos y tareas con shadcn/ui
-          </p>
-          <div className="pt-4">
-            <ProjectForm />
-          </div>
-        </div>
+        <Hero
+          eyebrow="Panel de proyectos"
+          title="Aero Projects"
+          subtitle="Gestiona proyectos, equipo y tareas con shadcn/ui, en un entorno claro y fresco."
+        >
+          <ProjectForm />
+        </Hero>
 
         {/* Tabs Navigation */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList>
+          <TabsList className="aero-glass h-auto gap-1 rounded-2xl p-1.5">
             <TabsTrigger value="overview">Resumen</TabsTrigger>
             <TabsTrigger value="projects">Proyectos</TabsTrigger>
             <TabsTrigger value="team">Equipo</TabsTrigger>
@@ -36,152 +43,39 @@ export default function DashboardPage() {
           </TabsList>
 
           {/* Tab: Overview */}
-          <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {/* Stat Cards */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Total Proyectos
-                  </CardTitle>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">12</div>
-                  <p className="text-xs text-muted-foreground">
-                    +2 desde el mes pasado
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Tareas Completadas
-                  </CardTitle>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  >
-                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                  </svg>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">143</div>
-                  <p className="text-xs text-muted-foreground">
-                    +19% desde la semana pasada
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Horas Trabajadas
-                  </CardTitle>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  >
-                    <rect width="20" height="14" x="2" y="5" rx="2" />
-                    <path d="M2 10h20" />
-                  </svg>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">324h</div>
-                  <p className="text-xs text-muted-foreground">
-                    +12h desde ayer
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Miembros Activos
-                  </CardTitle>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">8</div>
-                  <p className="text-xs text-muted-foreground">
-                    +1 nuevo miembro
-                  </p>
-                </CardContent>
-              </Card>
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid gap-x-4 gap-y-8 pt-3 md:grid-cols-2 lg:grid-cols-4">
+              <StatCard label="Total Proyectos" value={projects.length} hint={plural(projects.filter((p) => p.status === "Completado").length, "completado", "completados")} orb="aqua" />
+              <StatCard label="Tareas Completadas" value={done} hint={`de ${tasks.length} tareas en total`} orb="leaf" delay={0.6} />
+              <StatCard label="Tareas Abiertas" value={open} hint={plural(urgent, "urgente sin completar", "urgentes sin completar")} orb="sky" delay={1.2} />
+              <StatCard label="Miembros Activos" value={active} hint={plural(members.length - active, "inactivo", "inactivos")} orb="lime" delay={1.8} />
             </div>
 
             {/* Recent Activity */}
             <Card>
               <CardHeader>
                 <CardTitle>Actividad Reciente</CardTitle>
-                <CardDescription>
-                  Últimas actualizaciones de tus proyectos
-                </CardDescription>
+                <CardDescription>Últimas tareas registradas en tus proyectos</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {[
-                    { user: "María García", action: "completó la tarea", task: "Diseño de UI", time: "Hace 5 min" },
-                    { user: "Juan Pérez", action: "comentó en", task: "API Backend", time: "Hace 1 hora" },
-                    { user: "Ana López", action: "creó un nuevo", task: "Proyecto Mobile", time: "Hace 2 horas" },
-                    { user: "Carlos Ruiz", action: "actualizó", task: "Documentación", time: "Hace 3 horas" },
-                  ].map((activity, i) => (
-                    <div key={i} className="flex items-center gap-4">
-                      <Avatar>
-                        <AvatarFallback>{activity.user[0]}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium leading-none">
-                          {activity.user}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {activity.action} <span className="font-medium">{activity.task}</span>
-                        </p>
+                  {recent.map((t) => {
+                    const who = members.find((m) => m.userId === t.userId)?.name ?? "Sin asignar"
+                    return (
+                      <div key={t.id} className="flex items-center gap-4">
+                        <Avatar>
+                          <AvatarFallback>{who[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium leading-none">{who}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {t.description} <span className="font-medium">· {t.status}</span>
+                          </p>
+                        </div>
+                        <div className="text-sm text-muted-foreground">{t.dateline}</div>
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        {activity.time}
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>
