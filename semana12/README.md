@@ -24,6 +24,20 @@ Tabla `Book` con registros en el Table Editor de Supabase.
 
 ![Tabla Book en Supabase](capturas/00c-supabase-tablas.png)
 
+### Vista móvil (390 px de ancho)
+
+| Dashboard | Galería de autores |
+|---|---|
+| ![Dashboard en móvil](capturas/13a-movil-dashboard.png) | ![Galería en móvil](capturas/13b-movil-galeria.png) |
+
+| Libros: filtros | Libros: lista |
+|---|---|
+| ![Filtros en móvil](capturas/13c-movil-libros-filtros.png) | ![Lista de libros en móvil](capturas/13d-movil-libros-lista.png) |
+
+| Ficha del autor |
+|---|
+| ![Ficha del autor en móvil](capturas/13e-movil-ficha-autor.png) |
+
 ### Pruebas de la API
 
 #### 1. `GET /api/authors`: listar autores
