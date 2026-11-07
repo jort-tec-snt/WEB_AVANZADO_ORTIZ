@@ -7,9 +7,11 @@ import { ProjectForm } from "@/components/ProjectForm"
 import { TasksTable } from "@/components/TasksTable"
 import { ProjectsTab } from "@/components/dashboard/ProjectsTab"
 import { TeamTab } from "@/components/dashboard/TeamTab"
+import { SettingsTab } from "@/components/dashboard/SettingsTab"
 import { Hero } from "@/components/aero/Hero"
 import { StatCard } from "@/components/dashboard/StatCard"
-import { useData } from "@/lib/data-context"
+import { projectProgress, useData } from "@/lib/data-context"
+import { formatDate } from "@/lib/rules"
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
@@ -51,8 +53,9 @@ export default function DashboardPage() {
               <StatCard label="Miembros Activos" value={active} hint={plural(members.length - active, "inactivo", "inactivos")} orb="lime" delay={1.8} />
             </div>
 
+            <div className="grid gap-6 lg:grid-cols-5">
             {/* Recent Activity */}
-            <Card>
+            <Card className="lg:col-span-3">
               <CardHeader>
                 <CardTitle>Actividad Reciente</CardTitle>
                 <CardDescription>Últimas tareas registradas en tus proyectos</CardDescription>
@@ -72,13 +75,41 @@ export default function DashboardPage() {
                             {t.description} <span className="font-medium">· {t.status}</span>
                           </p>
                         </div>
-                        <div className="text-sm text-muted-foreground">{t.dateline}</div>
+                        <div className="text-sm text-muted-foreground">{formatDate(t.dateline)}</div>
                       </div>
                     )
                   })}
                 </div>
               </CardContent>
             </Card>
+
+            {/* Avance por proyecto */}
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <CardTitle>Avance por Proyecto</CardTitle>
+                <CardDescription>Tareas completadas sobre el total</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-4">
+                  {projects.map((p) => {
+                    const own = tasks.filter((t) => t.projectId === p.id)
+                    const pct = projectProgress(p.id, tasks)
+                    return (
+                      <li key={p.id}>
+                        <div className="mb-1.5 flex items-baseline justify-between gap-2 text-sm">
+                          <span className="truncate font-semibold">{p.title}</span>
+                          <span className="shrink-0 font-mono text-xs text-muted-foreground">
+                            {own.filter((t) => t.status === "Completado").length}/{own.length} · {pct}%
+                          </span>
+                        </div>
+                        <div className="aero-progress"><span style={{ width: `${pct}%` }} /></div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </CardContent>
+            </Card>
+            </div>
           </TabsContent>
 
           {/* Tab: Projects */}
@@ -93,34 +124,12 @@ export default function DashboardPage() {
 
           {/* Tab: Tasks */}
           <TabsContent value="tasks" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Gestión de Tareas</CardTitle>
-                <CardDescription>
-                  Administra todas las tareas de tus proyectos
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <TasksTable />
-              </CardContent>
-            </Card>
+            <TasksTable />
           </TabsContent>
 
           {/* Tab: Settings */}
           <TabsContent value="settings">
-            <Card>
-              <CardHeader>
-                <CardTitle>Configuración</CardTitle>
-                <CardDescription>
-                  Administra las preferencias de tu cuenta
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Configuración en desarrollo...
-                </p>
-              </CardContent>
-            </Card>
+            <SettingsTab />
           </TabsContent>
         </Tabs>
       </div>

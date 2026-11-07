@@ -1,4 +1,4 @@
-import type { Member, Project } from "./types";
+import type { Member, Project, Settings, Task } from "./types";
 
 // Reglas de validación compartidas por todos los formularios (una sola fuente).
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -68,5 +68,31 @@ export function validateMember(d: MemberDraft, others: Member[]): FieldErrors {
   }
   if (!d.phone.trim()) e.phone = "El teléfono es obligatorio";
   else if (!PHONE_RE.test(d.phone.trim())) e.phone = "Teléfono inválido (7 a 15 dígitos, puede incluir +51)";
+  return e;
+}
+
+export type TaskDraft = Omit<Task, "id">;
+
+export function validateTask(d: TaskDraft, isNew: boolean): FieldErrors {
+  const e: FieldErrors = {};
+  const desc = required(d.description, "La descripción") ?? minLen(d.description, 5, "La descripción");
+  if (desc) e.description = desc;
+  else if (d.description.trim().length > 120) e.description = "La descripción no puede superar los 120 caracteres";
+  if (!d.projectId) e.projectId = "Selecciona el proyecto de la tarea";
+  if (!d.status) e.status = "Selecciona el estado";
+  if (!d.priority) e.priority = "Selecciona la prioridad";
+  if (!parseISO(d.dateline)) e.dateline = "Selecciona la fecha límite";
+  else if (isNew && d.dateline < isoToday()) e.dateline = "La fecha límite no puede estar en el pasado";
+  return e;
+}
+
+export function validateSettings(d: Settings): FieldErrors {
+  const e: FieldErrors = {};
+  const name = required(d.displayName, "El nombre") ?? minLen(d.displayName, 3, "El nombre");
+  if (name) e.displayName = name;
+  if (!d.email.trim()) e.email = "El correo es obligatorio";
+  else if (!EMAIL_RE.test(d.email.trim())) e.email = "Ingresa un correo válido (ej. nombre@dominio.com)";
+  if (!d.workdayStart || !d.workdayEnd) e.workday = "Define el inicio y el fin de la jornada";
+  else if (d.workdayStart >= d.workdayEnd) e.workday = "El fin de la jornada debe ser posterior al inicio";
   return e;
 }
