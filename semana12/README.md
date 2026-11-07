@@ -62,6 +62,27 @@ pnpm dev                  # http://localhost:3000
 
 `scripts/probar-api.sh` ejecuta con `curl` las pruebas de los endpoints, en el mismo orden de las evidencias.
 
+## Despliegue
+
+La aplicación está desplegada en Vercel: <https://next-api-routes-ortizdev-x86.vercel.app>
+
+| Ajuste | Valor |
+|---|---|
+| Repositorio y rama | `jort-tec-snt/WEB_AVANZADO_ORTIZ`, rama `main` |
+| Root Directory | `semana12/next-api-routes` |
+| Framework | Next.js |
+| Build Command | `prisma generate && next build` (el cliente de Prisma se genera en cada build porque no se versiona) |
+| Variable de entorno | `DATABASE_URL` (Session pooler de Supabase), cargada en Vercel y nunca en el repositorio |
+
+Cada `push` a `main` genera un nuevo despliegue de producción.
+
+### Problema encontrado en producción
+
+Las páginas cargaban, pero todas las rutas de la API respondían 500. Los logs de runtime de Vercel mostraron `EMAXCONNSESSION: max clients reached in session mode`.
+
+- **Causa:** cada función serverless crea su propio pool de conexiones (hasta 10 por defecto en `pg`) y el Session pooler de Supabase admite pocas conexiones a la vez. Además, el servidor local y el cliente de base de datos compartían ese mismo cupo.
+- **Solución:** en `src/lib/prisma.ts`, en producción el pool se limita a 1 conexión por instancia (`max: 1`) y se cierran las inactivas a los 10 segundos (`idleTimeoutMillis`). Como alternativa más robusta se puede usar el Transaction pooler de Supabase (puerto 6543), pensado para entornos serverless.
+
 ## Evidencias
 
 ### Base de datos
@@ -81,6 +102,16 @@ Tablas `Author` y `Book` y su relación.
 Tabla `Book` con registros en el Table Editor de Supabase.
 
 ![Tabla Book en Supabase](capturas/00c-supabase-tablas.png)
+
+### Aplicación desplegada en Vercel
+
+Dashboard en producción (`https://next-api-routes-ortizdev-x86.vercel.app`).
+
+![Dashboard en producción](capturas/14a-produccion-dashboard.png)
+
+Listado de libros en producción, con datos de Supabase.
+
+![Libros en producción](capturas/14b-produccion-libros.png)
 
 ### Vista móvil (390 px de ancho)
 
