@@ -1,0 +1,42 @@
+// Sistema de Biblioteca: autores y libros (Laboratorio 12).
+// Prisma 7: la URL de conexion ya no va aqui, vive en prisma.config.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Author {
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  bio         String?
+  nationality String?
+  birthYear   Int?
+  imageUrl    String?
+  books       Book[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Book {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  isbn          String?  @unique
+  publishedYear Int?
+  genre         String?
+  pages         Int?
+  authorId      String
+  author        Author   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([authorId])
+  @@index([genre])
+  @@index([title])
+}
