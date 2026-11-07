@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { DataProvider } from "@/lib/data-context";
 import { AeroBackground } from "@/components/aero/AeroBackground";
+import { NoticeProvider } from "@/lib/notice-context";
+import { BusyPill } from "@/components/dashboard/BusyPill";
 
 // Dos familias: Nunito Sans (interfaz, humanista y redondeada, afín al Aero) y Geist Mono (cifras).
 const nunito = Nunito_Sans({ subsets: ["latin"], variable: "--font-sans" });
@@ -19,7 +21,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es" className={cn("h-full antialiased font-sans", nunito.variable, geistMono.variable)}>
       <body className="min-h-full flex flex-col">
         <AeroBackground />
-        <DataProvider>{children}</DataProvider>
+        <DataProvider>
+          <NoticeProvider>
+            {children}
+            <BusyPill />
+          </NoticeProvider>
+        </DataProvider>
       </body>
     </html>
   );
