@@ -6,3 +6,10 @@ node_modules/
 # Archivos de contexto de agentes (los regenera `next dev`)
 AGENTS.md
 CLAUDE.md
+
+# Documentos de entrega (se suben a mano al Canvas, nunca al repositorio)
+*.docx
+*.doc
+*.dotx
+*.odt
+.~lock.*
