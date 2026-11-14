@@ -48,6 +48,47 @@ URLs de callback: `<NEXTAUTH_URL>/api/auth/callback/google` y `<NEXTAUTH_URL>/ap
 - `src/styles`: `tokens.css`, `base.css`, `components.css`, `pages.css`.
 - `public/aero`: imágenes del tema (WebP).
 
+## Evidencias
+Capturas en [`../capturas`](../capturas/).
+
+### Interfaz y rutas protegidas
+**Pantalla de acceso** (`/signIn`): credenciales, Google y GitHub.
+
+![Pantalla de acceso](../capturas/01-signin.png)
+
+**Dashboard** con la sesión iniciada: método de acceso, tipo de sesión y mapa de rutas.
+
+![Dashboard](../capturas/04-dashboard-credenciales.png)
+
+**Perfil** (`/profile`).
+
+![Perfil](../capturas/05-profile-credenciales.png)
+
+**Ruta protegida:** sin sesión, `/dashboard` redirige a `/signIn?callbackUrl=%2Fdashboard`.
+
+![Ruta protegida](../capturas/14-ruta-protegida-redirige-signin.png)
+
+**Ruta solo para invitados:** con sesión activa, `/signIn` redirige a `/dashboard`. La etiqueta inferior muestra la URL final, porque la captura se tomó en modo headless.
+
+![Ruta de invitados](../capturas/15-ruta-invitados-redirige-dashboard.png)
+
+### Credenciales: registro, errores y bloqueo
+**Formulario de registro** (`/register`), vacío y con datos.
+
+![Registro](../capturas/02-register.png)
+![Registro con datos](../capturas/03-registro-nueva-cuenta.png)
+
+**Contraseña incorrecta:** el mensaje indica los intentos restantes.
+
+![Error de credenciales](../capturas/06-error-credenciales.png)
+
+**Bloqueo:** tras 5 intentos fallidos la cuenta se bloquea 15 minutos, incluso con la contraseña correcta.
+
+![Cuenta bloqueada](../capturas/07-cuenta-bloqueada.png)
+
+### Vista móvil
+<img src="../capturas/17-movil-signin.png" alt="Acceso en móvil" width="260"> <img src="../capturas/18-movil-dashboard.png" alt="Dashboard en móvil" width="260">
+
 ## Entrega
 - Repositorio: _pendiente_
 - Despliegue en Vercel: _pendiente_
