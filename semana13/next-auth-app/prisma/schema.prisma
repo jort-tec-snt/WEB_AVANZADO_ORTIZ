@@ -1,0 +1,22 @@
+// Usuarios con credenciales (Laboratorio 13). Los usuarios de Google/GitHub
+// viven solo en el JWT de NextAuth y no se guardan aqui.
+// Prisma 7: la URL de conexion vive en prisma.config.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String
+  email          String    @unique
+  passwordHash   String
+  failedAttempts Int       @default(0)
+  lockedUntil    DateTime?
+  createdAt      DateTime  @default(now())
+}
