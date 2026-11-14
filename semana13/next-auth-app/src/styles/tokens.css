@@ -1,0 +1,47 @@
+/* Tokens del tema Frutiger Aero para el portal de acceso (Laboratorio 13). */
+:root {
+  color-scheme: light;
+
+  /* Color: matiz 215-235 = cielo/agua, 140-150 = hoja */
+  --sky-top: oklch(0.8 0.11 228);
+  --sky-mid: oklch(0.93 0.05 210);
+  --sky-low: oklch(0.97 0.025 200);
+  --grass: oklch(0.86 0.13 140);
+  --leaf: oklch(0.7 0.19 145);
+  --leaf-deep: oklch(0.5 0.15 152);
+  --aqua: oklch(0.62 0.145 228);
+  --aqua-deep: oklch(0.42 0.12 240);
+  --ink: oklch(0.27 0.06 240);
+  --ink-soft: oklch(0.45 0.05 235);
+  --danger: oklch(0.55 0.2 27);
+  --danger-bg: oklch(0.96 0.03 25);
+
+  /* Vidrio */
+  --glass-bg: oklch(1 0 0 / 0.58);
+  --glass-strong: oklch(1 0 0 / 0.78);
+  --glass-border: oklch(1 0 0 / 0.85);
+  --glass-edge: oklch(0.55 0.1 225 / 0.22);
+  --glow: 0 10px 30px oklch(0.55 0.1 225 / 0.22);
+
+  /* Tipografia: dos familias (se cargan en layout.tsx) */
+  --font-sans: var(--font-nunito), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Espaciado y formas */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --radius-sm: 0.6rem;
+  --radius-md: 0.9rem;
+  --radius-lg: 1.4rem;
+  --radius-pill: 999px;
+  --width-panel: 26rem;
+  --width-page: 68rem;
+  --z-nav: 20;
+  /* Altura de la silueta (imagen 3:1): nunca mas alta que su proporcion ni que el 30% de la pantalla. */
+  --skyline-h: min(33.3vw, 30vh);
+}

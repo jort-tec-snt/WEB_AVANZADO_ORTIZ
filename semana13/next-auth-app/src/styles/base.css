@@ -1,0 +1,57 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-family: var(--font-sans); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  background:
+    radial-gradient(60rem 30rem at 15% -10%, oklch(1 0 0 / 0.9), transparent 60%),
+    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-low) 70%, var(--grass) 100%);
+  background-attachment: fixed;
+}
+
+/* Capas de imagen opcionales (public/aero). Si no existen, queda el degradado. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: url("/aero/bg-sky.webp") center / cover no-repeat;
+  pointer-events: none;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url("/aero/bubbles.webp") center / cover no-repeat;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Silueta de arquitectura en el horizonte (tira transparente, sobre el cesped). */
+html::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--skyline-h);
+  z-index: -1;
+  background: url("/aero/arch-skyline.webp") center bottom / contain no-repeat;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+a { color: inherit; }
+:focus-visible { outline: 3px solid oklch(0.68 0.14 215 / 0.7); outline-offset: 2px; }
+
+.mono { font-family: var(--font-mono); letter-spacing: 0.04em; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
