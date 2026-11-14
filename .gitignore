@@ -3,9 +3,25 @@ node_modules/
 *.log
 .DS_Store
 
-# Archivos de contexto de agentes (los regenera `next dev`)
+# Contexto y configuracion de herramientas de IA: trabajo local y confidencial
 AGENTS.md
 CLAUDE.md
+GEMINI.md
+.agent-context/
+.claude/
+.codex/
+.chatgpt/
+.opencode/
+.cursor/
+.gemini/
+.aider*
+.continue/
+.windsurf/
+.github/copilot-instructions.md
+
+# Variables de entorno (solo se versionan los .env.example)
+.env.*
+!.env.example
 
 # Documentos de entrega (se suben a mano al Canvas, nunca al repositorio)
 *.docx
