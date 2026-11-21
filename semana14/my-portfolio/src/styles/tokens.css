@@ -1,0 +1,43 @@
+/* Tokens del tema Frutiger Aero para el portafolio (Laboratorio 14). */
+:root {
+  color-scheme: light;
+
+  /* Color: matiz 205-235 = cielo/agua, 140-150 = hoja */
+  --sky-top: oklch(0.82 0.1 225);
+  --sky-mid: oklch(0.94 0.04 210);
+  --sky-low: oklch(0.975 0.02 195);
+  --grass: oklch(0.88 0.11 140);
+  --leaf: oklch(0.7 0.18 145);
+  --aqua: oklch(0.55 0.14 232);
+  --aqua-deep: oklch(0.4 0.12 245);
+  --ink: oklch(0.25 0.05 245);
+  --ink-soft: oklch(0.42 0.045 240);
+
+  /* Vidrio */
+  --glass-bg: oklch(1 0 0 / 0.62);
+  --glass-strong: oklch(1 0 0 / 0.82);
+  --glass-border: oklch(1 0 0 / 0.9);
+  --glass-edge: oklch(0.5 0.1 230 / 0.2);
+  --glow: 0 12px 32px oklch(0.5 0.1 230 / 0.2);
+
+  /* Tipografía: Inter (local) + monoespaciada del sistema */
+  --font-sans: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "DejaVu Sans Mono", monospace;
+
+  /* Espaciado y formas */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --radius-sm: 0.6rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-pill: 999px;
+  --width-page: 70rem;
+  --width-prose: 42rem;
+  --z-nav: 50;
+}

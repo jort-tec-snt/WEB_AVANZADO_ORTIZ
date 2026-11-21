@@ -1,0 +1,55 @@
+.section { padding-block: var(--space-12); }
+
+/* Inicio: hero asimétrico */
+.hero { position: relative; display: grid; gap: var(--space-12); align-items: center; padding-block: var(--space-12) var(--space-8); }
+@media (min-width: 52rem) { .hero { grid-template-columns: 1.25fr 1fr; } }
+.hero-title { font-size: clamp(2.6rem, 7vw, 5rem); line-height: 0.98; font-weight: 800; letter-spacing: -0.035em; margin: var(--space-3) 0 var(--space-4); }
+.hero-title span { color: var(--aqua-deep); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
+.hero-stats { display: flex; flex-wrap: wrap; gap: var(--space-8); margin: var(--space-8) 0 0; padding: 0; list-style: none; }
+.hero-stats strong { display: block; font-size: 1.75rem; font-weight: 800; color: var(--aqua-deep); }
+.hero-stats span { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+
+.orb { position: relative; justify-self: center; width: min(100%, 22rem); aspect-ratio: 1; border-radius: 50%; padding: 0.9rem;
+  background: radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.95), oklch(0.85 0.08 215 / 0.55) 60%, oklch(0.7 0.12 225 / 0.45));
+  border: 1px solid var(--glass-border); box-shadow: var(--glow), inset 0 -18px 40px oklch(0.5 0.12 230 / 0.25); }
+.orb-photo { position: relative; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 4px solid oklch(1 0 0 / 0.9); }
+.orb-photo img { object-fit: cover; }
+.orb-shine { position: absolute; z-index: 1; inset: 6% 14% auto 14%; height: 30%; border-radius: 50%; background: linear-gradient(180deg, oklch(1 0 0 / 0.55), transparent); pointer-events: none; }
+.bubble { position: absolute; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 30% 28%, oklch(1 0 0 / 0.95) 0 12%, oklch(1 0 0 / 0.25) 40%, oklch(0.8 0.1 215 / 0.35));
+  border: 1px solid oklch(1 0 0 / 0.8); animation: float 7s ease-in-out infinite; }
+.bubble-a { width: 4.5rem; height: 4.5rem; top: -1rem; right: -0.5rem; }
+.bubble-b { width: 2.5rem; height: 2.5rem; bottom: 12%; left: -1.25rem; animation-delay: -3s; }
+.bubble-c { width: 1.5rem; height: 1.5rem; bottom: -0.5rem; right: 18%; animation-delay: -5s; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+.section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-8); }
+.section-title { margin: var(--space-2) 0 0; font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; letter-spacing: -0.02em; }
+.grid-projects { display: grid; gap: var(--space-8); grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
+
+/* Detalle de proyecto */
+.back-link { display: inline-block; margin-bottom: var(--space-6); font-weight: 700; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+.detail { display: grid; gap: var(--space-8); }
+@media (min-width: 56rem) { .detail { grid-template-columns: 1.6fr 1fr; align-items: start; } }
+.detail-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; padding: 0; }
+.detail-media img { object-fit: cover; }
+.detail-panel { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-6); }
+.detail-panel h2 { margin: 0 0 var(--space-3); font-size: 1rem; font-family: var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--aqua-deep); }
+.detail-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+/* Sobre mí */
+.about { display: grid; gap: var(--space-12); }
+@media (min-width: 52rem) { .about { grid-template-columns: 1fr 1.8fr; align-items: start; } }
+.about-photo { position: relative; aspect-ratio: 1; overflow: hidden; padding: 0; }
+.about-photo img { object-fit: cover; }
+.prose p { margin: 0 0 var(--space-4); line-height: 1.7; color: var(--ink-soft); max-width: var(--width-prose); }
+.skills-panel { padding: var(--space-8); }
+
+/* Contacto */
+.contact { display: grid; gap: var(--space-8); }
+@media (min-width: 52rem) { .contact { grid-template-columns: 1.4fr 1fr; align-items: start; } }
+.contact-panel { padding: var(--space-8); }
+.contact-form { display: flex; flex-direction: column; gap: var(--space-4); }
+.notice { margin: 0; padding: var(--space-4); border-radius: var(--radius-md); background: oklch(1 0 0 / 0.8); line-height: 1.5; }
