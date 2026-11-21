@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { personalInfo } from '@/lib/data';
+import { personalInfo, skillGroups } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Sobre Mí',
@@ -9,17 +9,6 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  const skills = [
-    'JavaScript/TypeScript',
-    'React & Next.js',
-    'Node.js & Express',
-    'PostgreSQL & MongoDB',
-    'Tailwind CSS',
-    'Git & GitHub',
-    'Docker',
-    'AWS',
-  ];
-
   return (
     <div className="wrap section">
       <p className="eyebrow">Perfil</p>
@@ -41,19 +30,22 @@ export default function AboutPage() {
             ¡Hola! Soy {personalInfo.name}
           </h2>
           <p>
-            Soy un desarrollador full stack apasionado por crear experiencias
-            web excepcionales. Me especializo en construir aplicaciones modernas
-            y escalables.
+            Soy desarrollador de software y trabajo bajo el nombre OrtizDev.
+            Construyo backends y APIs, aplicaciones móviles y sistemas IoT, y
+            automatizo los procesos de empresa que los rodean.
           </p>
           <p>
-            Mi enfoque está en escribir código limpio, mantenible y eficiente,
-            siempre buscando las mejores prácticas y las últimas tecnologías
-            para entregar productos de alta calidad.
+            Vengo del mundo de los datos geoespaciales. Me gustan los sistemas
+            que tocan el mundo físico, así que me muevo entre código, datos y
+            dispositivos. He desarrollado plataformas web, una app móvil de
+            primeros auxilios y un sistema de hardware y software para tiendas
+            pequeñas.
           </p>
           <p>
-            Cuando no estoy programando, me gusta contribuir a proyectos de
-            código abierto, escribir artículos técnicos y aprender nuevas
-            tecnologías.
+            En este curso de Desarrollo Web Avanzado he trabajado con Next.js,
+            API Routes con Prisma, autenticación con NextAuth.js y despliegue en
+            Vercel. Soy curioso, investigo tecnología todo el tiempo y sé que el
+            camino es largo.
           </p>
         </div>
       </div>
@@ -65,13 +57,20 @@ export default function AboutPage() {
           <h2 className="section-title" style={{ marginBottom: 'var(--space-6)' }}>
             Habilidades Técnicas
           </h2>
-          <ul className="tag-list">
-            {skills.map((skill) => (
-              <li key={skill} className="tag" style={{ fontSize: '0.9rem', padding: '0.4rem 1rem' }}>
-                {skill}
-              </li>
+          <div className="skills-grid">
+            {skillGroups.map((group) => (
+              <div key={group.area}>
+                <h3 className="skills-area">{group.area}</h3>
+                <ul className="tag-list">
+                  {group.items.map((skill) => (
+                    <li key={skill} className="tag">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
     </div>

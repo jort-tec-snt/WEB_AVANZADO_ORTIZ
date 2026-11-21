@@ -19,6 +19,14 @@ export default function Footer() {
             >
               GitHub
             </a>
+            <a
+              href={personalInfo.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
+              LinkedIn
+            </a>
             <Link href="/contact">Contacto</Link>
             {personalInfo.email && (
               <a href={`mailto:${personalInfo.email}`} aria-label="Email">

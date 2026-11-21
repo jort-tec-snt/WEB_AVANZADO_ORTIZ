@@ -37,16 +37,26 @@ export default function ContactPage() {
           <p className="eyebrow">Otros canales</p>
           <p className="prose" style={{ marginTop: 'var(--space-3)' }}>
             <span style={{ display: 'block', marginBottom: 'var(--space-4)', color: 'var(--ink-soft)', lineHeight: 1.6 }}>
-              También puedes ver mi trabajo y contribuciones en GitHub.
+              También puedes ver mi trabajo en GitHub o escribirme por LinkedIn.
             </span>
-            <a
-              href={personalInfo.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-leaf"
-            >
-              Ir a GitHub
-            </a>
+            <span style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+              <a
+                href={personalInfo.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-leaf"
+              >
+                Ir a GitHub
+              </a>
+              <a
+                href={personalInfo.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-glass"
+              >
+                LinkedIn
+              </a>
+            </span>
           </p>
         </aside>
       </div>

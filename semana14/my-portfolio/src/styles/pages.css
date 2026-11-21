@@ -46,10 +46,13 @@
 .about-photo img { object-fit: cover; }
 .prose p { margin: 0 0 var(--space-4); line-height: 1.7; color: var(--ink-soft); max-width: var(--width-prose); }
 .skills-panel { padding: var(--space-8); }
+.skills-grid { display: grid; gap: var(--space-8) var(--space-12); grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+.skills-area { margin: 0 0 var(--space-3); font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
 
 /* Contacto */
 .contact { display: grid; gap: var(--space-8); }
 @media (min-width: 52rem) { .contact { grid-template-columns: 1.4fr 1fr; align-items: start; } }
 .contact-panel { padding: var(--space-8); }
 .contact-form { display: flex; flex-direction: column; gap: var(--space-4); }
+.contact-form .btn { align-self: flex-start; }
 .notice { margin: 0; padding: var(--space-4); border-radius: var(--radius-md); background: oklch(1 0 0 / 0.8); line-height: 1.5; }
