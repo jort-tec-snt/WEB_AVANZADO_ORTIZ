@@ -91,6 +91,10 @@ Métricas en móvil: FCP 0,8 s · LCP 2,3 s · TBT 30 ms · CLS 0 · Speed Index
 ![sitemap.xml en producción](../capturas/16-dominio-sitemap-xml.png)
 ![robots.txt en producción](../capturas/17-dominio-robots-txt.png)
 
+Subdominio `ortizdev` en DuckDNS con el registro A hacia Vercel (el token y la URL de sesión están ocultos):
+
+![DuckDNS](../capturas/41-duckdns-subdominio-token-oculto.png)
+
 ## Entrega
 - Repositorio: <https://github.com/jort-tec-snt/WEB_AVANZADO_ORTIZ/tree/main/semana14/my-portfolio>
 - Dominio: <https://ortizdev.duckdns.org>
