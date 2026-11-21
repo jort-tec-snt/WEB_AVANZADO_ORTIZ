@@ -61,6 +61,12 @@ Capturas en [`../capturas`](../capturas/).
 ![sitemap.xml](../capturas/05-sitemap-xml.png)
 ![robots.txt](../capturas/06-robots-txt.png)
 
+### Meta tags en DevTools (dominio de producción)
+`<head>` con `<title>`, `description`, Open Graph (`og:title`, `og:description`, `og:url`, `og:image`, `og:locale`, `og:type`) y Twitter Card.
+
+![Inicio del head](../capturas/09-head-title-devtools.png)
+![Meta tags og y twitter](../capturas/08-head-og-devtools.png)
+
 ### Lighthouse (PageSpeed Insights sobre el dominio)
 | Modo | Rendimiento | Accesibilidad | Prácticas recomendadas | SEO |
 |---|---|---|---|---|
