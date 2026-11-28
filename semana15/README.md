@@ -16,7 +16,8 @@ Se usa **pnpm** en lugar de `npm`/`npx`.
 | 1. Base de datos | MariaDB local. Base en la nube pendiente |
 | 2. Backend | Hecho y probado |
 | 3. Frontend | Hecho y probado |
-| Tarea: usuarios y roles, categorías y filtro | Pendiente |
+| Tarea: usuarios, roles, login y protección de rutas | Hecho en local |
+| Tarea: categorías, imagen y filtro | Pendiente |
 | Tarea: CORS restringido | Hecho en local; falta el dominio de Vercel |
 | Tarea: despliegue en Render y Vercel | Pendiente |
 
@@ -77,7 +78,18 @@ pnpm install
 pnpm dev                  # http://localhost:3001
 ```
 
-Espera el mensaje `Servidor corriendo en http://localhost:3001`. Solo la primera vez, desde otra terminal en `backend-marketplace`, carga los productos de prueba (pedirá tu clave):
+Espera el mensaje `Servidor corriendo en http://localhost:3001`.
+
+Crea las cuentas de prueba con **tus propias claves** (solo la primera vez, desde otra terminal en `backend-marketplace`):
+
+```bash
+cp .env.seed.example .env.seed   # escribe una clave de 8 o más caracteres para cada cuenta
+pnpm seed:users
+```
+
+En desarrollo `JWT_SECRET` puede quedar vacío: se genera una clave temporal y las sesiones se cierran al reiniciar el backend. Para evitarlo, pon en el `.env` el resultado de `openssl rand -hex 48`.
+
+También solo la primera vez, desde otra terminal en `backend-marketplace`, carga los productos de prueba (pedirá tu clave):
 
 ```bash
 mariadb -h 127.0.0.1 -P 3307 -u marketplace -p marketplace < database/seed.sql
@@ -96,24 +108,26 @@ pnpm dev                  # http://localhost:3000
 
 ### 5. Usar la aplicación
 
-| Qué hacer | Dónde |
-|---|---|
-| Ver el catálogo | `http://localhost:3000` |
-| Ver el detalle | Clic en un producto |
-| Crear un producto | `/admin`: completa el formulario y pulsa **Crear** |
-| Editar | `/admin`: **Editar**, cambia los datos y pulsa **Actualizar** |
-| Eliminar | `/admin`: **Eliminar** y luego **¿Confirmar?** |
-| Consultar la API | `http://localhost:3001/api/products` |
+| Qué hacer | Dónde | Rol |
+|---|---|---|
+| Crear una cuenta | `/register` (siempre queda como `CUSTOMER`) | Visitante |
+| Iniciar sesión | `/login` con una cuenta de tu `.env.seed` | Visitante |
+| Ver el catálogo y el detalle | `/` y clic en un producto | `CUSTOMER`, `ADMIN` |
+| Crear un producto | `/admin`: completa el formulario y pulsa **Crear** | `ADMIN` |
+| Editar | `/admin`: **Editar**, cambia los datos y pulsa **Actualizar** | `ADMIN` |
+| Eliminar | `/admin`: **Eliminar** y luego **¿Confirmar?** | `ADMIN` |
+| Cerrar sesión | **Salir** | `CUSTOMER`, `ADMIN` |
 
-Por ahora `/admin` no pide inicio de sesión: úsalo solo en local.
+Todas las direcciones son de `http://localhost:3000`. La API también exige sesión: abrir `http://localhost:3001/api/products` directamente responde 401.
 
 ### Problemas frecuentes
 
 | Síntoma | Solución |
 |---|---|
+| Vuelve a pedir inicio de sesión | El backend se reinició sin `JWT_SECRET`, o pasaron 2 horas |
 | `ECONNREFUSED` al iniciar el backend | MariaDB está apagado o `DB_PORT` no coincide |
 | `Access denied for user` | La clave del `.env` no es la que pusiste en el SQL |
-| "No hay productos disponibles" | El backend está apagado o falta cargar `seed.sql` |
+| "No hay productos disponibles" | Falta cargar `seed.sql` |
 | `Origen no permitido por CORS` | Abre `http://localhost:3000` (no `127.0.0.1`) o ajusta `CORS_ORIGINS` |
 | Puerto en uso | Cierra el proceso que ocupa el 3000, 3001 o 3307 |
 
@@ -165,6 +179,8 @@ El script se ejecuta después del primer arranque, cuando la tabla ya existe.
 
 ### 2.4 Evidencias de los endpoints (Google Chrome)
 
+Estas pruebas corresponden a las partes 1 a 3 de la guía, antes de agregar autenticación. Hoy los mismos endpoints requieren un token.
+
 Las capturas de `POST`, `PUT` y `DELETE` se tomaron antes de restringir CORS (ver 2.5).
 
 Los `GET` se abren directamente en la barra de direcciones. `POST`, `PUT`, `DELETE` y el 404 se enviaron con `fetch` desde la misma pestaña, mostrando en pantalla la petición y la respuesta.
@@ -195,7 +211,7 @@ La guía usa `cors()`, que acepta cualquier origen. Aquí solo se autorizan los 
 - En producción (`NODE_ENV=production`), si falta la variable no se autoriza ningún origen.
 - Al desplegar, `CORS_ORIGINS` debe ser la URL exacta del frontend, por ejemplo `https://mi-proyecto.vercel.app`.
 
-CORS limita lo que otras páginas web pueden hacer desde el navegador, pero no reemplaza la autenticación: las rutas de escritura se protegerán por rol en la tarea.
+CORS limita lo que otras páginas web pueden hacer desde el navegador, pero no reemplaza la autenticación: la API exige además sesión y rol (ver paso 4).
 
 Pruebas en Google Chrome: `/admin` en `http://localhost:3000` carga los productos, y las peticiones lanzadas desde `http://127.0.0.1:3000` (un origen distinto) quedan bloqueadas.
 
@@ -274,3 +290,89 @@ Si `pnpm build` reporta estilos o fuentes que ya se corrigieron, borrar la cach�
 | Precio actualizado | [ver](capturas/14-admin-actualizado.jpg) |
 | Confirmación de borrado | [ver](capturas/15-admin-confirmar.jpg) |
 | Producto eliminado | [ver](capturas/16-admin-eliminado.jpg) |
+
+## Paso 4. Tarea: autenticación y roles
+
+### 4.1 Dependencias
+
+```bash
+cd semana15/backend-marketplace
+pnpm add bcryptjs@^3.0.3 jsonwebtoken@^9.0.3
+```
+
+### 4.2 Backend
+
+```
+src/
+├── config/auth.js                     clave y vigencia del JWT
+├── models/Role.js, User.js            tablas roles y users
+├── repositories/user.repository.js    consultas
+├── services/auth.service.js           registro, login y validación del token
+├── middlewares/auth.js                authenticate y requireRole
+├── middlewares/error-handler.js       respuesta uniforme de errores
+├── controllers/auth.controller.js
+├── routes/auth.js                     /api/auth
+├── shared/                            roles y HttpError
+└── seeders/users.js                   cuentas iniciales
+```
+
+| Endpoint | Acceso |
+|---|---|
+| `POST /api/auth/register` | Público; crea un `CUSTOMER` |
+| `POST /api/auth/login` | Público |
+| `GET /api/auth/me` | Con sesión |
+| `GET /api/products`, `GET /api/products/:id` | `CUSTOMER`, `ADMIN` |
+| `POST`, `PUT`, `DELETE /api/products` | `ADMIN` |
+
+Decisiones de seguridad:
+
+- Contraseñas con bcrypt (12 rondas); el hash nunca sale en las respuestas.
+- El rol no se lee de la petición de registro. Un `ADMIN` solo se crea con `pnpm seed:users`.
+- El JWT vence en 2 horas y se firma con HS256. El rol se consulta en la base en cada petición.
+- El login responde igual si falla el correo o la contraseña.
+- En producción el backend no arranca sin `JWT_SECRET`.
+
+### 4.3 Frontend
+
+| Página | Visitante | `CUSTOMER` | `ADMIN` |
+|---|---|---|---|
+| `/login`, `/register` | Sí | Redirige a `/` | Redirige a `/` |
+| `/`, `/products/[id]` | Redirige a `/login` | Sí | Sí |
+| `/admin` | Redirige a `/login` | Redirige a `/` con aviso | Sí |
+
+- `src/proxy.ts` aplica la matriz (en Next.js 16, `middleware` pasó a llamarse `proxy`). Valida la sesión con `GET /api/auth/me`, así el frontend no necesita la clave del JWT.
+- El token se guarda en una cookie `SameSite=Lax` (y `Secure` con HTTPS). No es `HttpOnly` porque el navegador debe leerlo para llamar a la API en otro dominio; se compensa con la expiración corta.
+- La barra muestra el enlace **Admin** solo a administradores. La protección real está en el proxy y en la API.
+
+Si la barra o los estilos no reflejan un cambio, detén `pnpm dev`, borra `.next` y vuelve a iniciarlo.
+
+### 4.4 Pruebas de la API
+
+| Prueba | Respuesta |
+|---|---|
+| Sin token, token falso o manipulado | 401 |
+| `CUSTOMER` consulta productos | 200 |
+| `CUSTOMER` hace `POST`, `PUT` o `DELETE` | 403 |
+| `ADMIN` crea y elimina | 201 y 200 |
+| Registro enviando `role: ADMIN` | 201, queda como `CUSTOMER` |
+| Registro con correo repetido | 409 |
+| Contraseña de menos de 8 caracteres | 400 |
+| Login con datos incorrectos o vacío | 401 |
+
+### 4.5 Evidencias (Google Chrome)
+
+Los recuadros grises tapan los campos de contraseña.
+
+![Registro, login y roles](capturas/04-login-y-roles.gif)
+
+| Prueba | Captura |
+|---|---|
+| `/admin` sin sesión lleva al login | [ver](capturas/19-sin-sesion-redirige.jpg) |
+| Registro | [ver](capturas/20-registro.jpg) |
+| Sesión `CUSTOMER`, sin enlace Admin | [ver](capturas/21-customer-catalogo.jpg) |
+| `CUSTOMER` intenta entrar a `/admin` | [ver](capturas/22-customer-sin-admin.jpg) |
+| Contraseña incorrecta | [ver](capturas/23-login-incorrecto.jpg) |
+| Sesión `ADMIN` | [ver](capturas/24-admin-catalogo.jpg) |
+| Panel de administración | [ver](capturas/25-admin-panel.jpg) |
+| `ADMIN` crea un producto | [ver](capturas/26-admin-crea.jpg) |
+| API sin token | [ver](capturas/27-api-sin-token.jpg) |
