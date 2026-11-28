@@ -86,9 +86,36 @@ Capturas en [`../capturas`](../capturas/).
 
 ![Cuenta bloqueada](../capturas/07-cuenta-bloqueada.png)
 
+### Producción (Vercel)
+Aplicación desplegada: <https://next-auth-app-ortizdev-x86.vercel.app>
+
+| Ajuste | Valor |
+|---|---|
+| Repositorio y rama | `jort-tec-snt/WEB_AVANZADO_ORTIZ`, rama `main` |
+| Root Directory | `semana13/next-auth-app` |
+| Framework | Next.js (build: `prisma generate && next build`) |
+| Variables de entorno | `DATABASE_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GITHUB_ID`, `GITHUB_SECRET`, `NEXTAUTH_URL`, `NEXTAUTH_SECRET` (cargadas en Vercel, nunca en el repositorio) |
+| OAuth en producción | cliente de Google y OAuth App de GitHub propios de producción, con las callbacks del dominio de Vercel |
+
+#### Problemas encontrados al desplegar
+1. **`[NO_SECRET] Please define a 'secret' in production`:** las páginas respondían 500 porque `NEXTAUTH_SECRET` no llegó a Vercel al pegar el `.env`. Se agregó a mano como variable de producción.
+2. **`TypeError: Invalid URL` en `assertConfig`:** `NEXTAUTH_URL` tenía un formato inválido. Se reescribió como `https://<dominio>` sin comillas ni barra final y se hizo un nuevo despliegue.
+3. **`Error 400: redirect_uri_mismatch` de Google:** el cliente de OAuth solo conocía `localhost`. Se creó un cliente de producción con el origen y la callback del dominio de Vercel.
+4. **GitHub `OAuthSignin`:** faltaban `GITHUB_ID` y `GITHUB_SECRET`, porque una OAuth App de GitHub admite una sola callback. Se creó una segunda app para producción.
+
+Los cambios en variables de entorno solo aplican tras un nuevo despliegue (Redeploy).
+
+![Acceso en producción](../capturas/20-produccion-signin.png)
+![Dashboard en producción con credenciales](../capturas/21-produccion-dashboard-credenciales.png)
+![Perfil en producción](../capturas/22-produccion-profile-credenciales.png)
+![Ruta protegida en producción](../capturas/23-produccion-ruta-protegida.png)
+![Bloqueo en producción](../capturas/24-produccion-cuenta-bloqueada.png)
+
+Las capturas del acceso con Google y GitHub en producción usan cuentas personales y se incluyen solo en el informe académico.
+
 ### Vista móvil
 <img src="../capturas/17-movil-signin.png" alt="Acceso en móvil" width="260"> <img src="../capturas/18-movil-dashboard.png" alt="Dashboard en móvil" width="260">
 
 ## Entrega
-- Repositorio: _pendiente_
-- Despliegue en Vercel: _pendiente_
+- Repositorio: <https://github.com/jort-tec-snt/WEB_AVANZADO_ORTIZ/tree/main/semana13/next-auth-app>
+- Despliegue en Vercel: <https://next-auth-app-ortizdev-x86.vercel.app>
