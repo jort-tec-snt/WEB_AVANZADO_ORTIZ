@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Product, ApiResponse } from '@/types/product';
 import { API_URL, formatPrice, formatSku } from '@/lib/api';
+import { serverAuthHeader } from '@/lib/auth-server';
 
 async function getProduct(id: string): Promise<Product | null> {
   try {
     const res = await fetch(`${API_URL}/products/${encodeURIComponent(id)}`, {
       cache: 'no-store',
+      headers: await serverAuthHeader(),
     });
 
     if (!res.ok) return null;

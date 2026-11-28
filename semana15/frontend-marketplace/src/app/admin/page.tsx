@@ -2,12 +2,28 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Product, ApiResponse } from '@/types/product';
-import { API_URL, formatPrice } from '@/lib/api';
+import { API_URL, authHeader, formatPrice } from '@/lib/api';
+import { clearToken, readToken } from '@/lib/session';
 
 const EMPTY_FORM = { nombre: '', precio: '', descripcion: '' };
 
+// Añade el token a cada petición y vuelve al acceso si la sesión ya no es válida.
+async function authFetch(url: string, init: RequestInit = {}) {
+  const res = await fetch(url, {
+    ...init,
+    headers: { ...init.headers, ...authHeader(readToken()) },
+  });
+  if (res.status === 401) {
+    clearToken();
+    // Recarga completa intencional: descarta lo cacheado de la sesión anterior.
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+    window.location.assign('/login');
+  }
+  return res;
+}
+
 async function requestProducts(): Promise<Product[]> {
-  const res = await fetch(`${API_URL}/products`, { cache: 'no-store' });
+  const res = await authFetch(`${API_URL}/products`, { cache: 'no-store' });
   const data: ApiResponse<Product[]> = await res.json();
   return data.success ? data.data : [];
 }
@@ -37,7 +53,7 @@ export default function AdminPage() {
   const send = async (url: string, init: RequestInit) => {
     setError('');
     try {
-      const res = await fetch(url, init);
+      const res = await authFetch(url, init);
       if (!res.ok) {
         const data = await res.json().catch(() => null);
         setError(data?.message ?? 'No se pudo completar la operación');

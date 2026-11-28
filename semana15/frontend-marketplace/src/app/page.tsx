@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { Product, ApiResponse } from '@/types/product';
 import { API_URL, formatPrice, formatSku } from '@/lib/api';
+import { serverAuthHeader } from '@/lib/auth-server';
 
 async function getProducts(): Promise<Product[]> {
   try {
     const res = await fetch(`${API_URL}/products`, {
       cache: 'no-store',
+      headers: await serverAuthHeader(),
     });
 
     if (!res.ok) return [];
@@ -18,11 +20,22 @@ async function getProducts(): Promise<Product[]> {
   }
 }
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ denegado?: string }>;
+}) {
+  const { denegado } = await searchParams;
   const products = await getProducts();
 
   return (
     <div className="shell py-12">
+      {denegado && (
+        <p role="alert" className="notice mb-6">
+          Tu rol no tiene acceso a esa página.
+        </p>
+      )}
+
       <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <h1 className="title">Productos</h1>
         <p className="eyebrow">{products.length} en catálogo</p>
