@@ -20,31 +20,106 @@ Se usa **pnpm** en lugar de `npm`/`npx`.
 | Tarea: CORS restringido | Hecho en local; falta el dominio de Vercel |
 | Tarea: despliegue en Render y Vercel | Pendiente |
 
-## Paso 1. Base de datos
+## Guía de usuario: practicar el laboratorio
 
-La guía crea un MySQL en Railway. En este laboratorio se trabaja con **MariaDB** en el puerto 3307. Es un motor distinto, derivado de MySQL y compatible para lo que usa este proyecto: Sequelize se conecta con `dialect: 'mysql'` y el controlador `mysql2`.
+Todos los valores son de ejemplo: cada persona crea **su propia base de datos y su propia clave**. Los archivos `.env` y `.env.local` no se suben al repositorio.
+
+### Requisitos
+
+- Node.js 18.18 o superior (probado con Node 24)
+- pnpm (probado con pnpm 12)
+- MariaDB (probado con 12.3 en Linux)
+- Git
+
+### 1. Descargar el proyecto
 
 ```bash
-# Una sola vez: crear el directorio de datos (sin root)
-mkdir -p ~/.local/share/dawa-s15-db
-mariadb-install-db --no-defaults --datadir=$HOME/.local/share/dawa-s15-db/data --auth-root-authentication-method=normal
+git clone https://github.com/jort-tec-snt/WEB_AVANZADO_ORTIZ.git
+cd WEB_AVANZADO_ORTIZ/semana15
+```
 
-# Cada sesión: arrancar el servidor (dejar la terminal abierta)
+### 2. Preparar la base de datos (terminal 1)
+
+En Linux, sin permisos de administrador. La primera línea de `mariadb-install-db` se ejecuta una sola vez.
+
+```bash
 D=$HOME/.local/share/dawa-s15-db
+mkdir -p $D
+mariadb-install-db --no-defaults --datadir=$D/data --auth-root-authentication-method=normal
 mariadbd --no-defaults --datadir=$D/data --socket=$D/mysql.sock --port=3307 --bind-address=127.0.0.1
 ```
 
-En otra terminal, una sola vez (usar la misma clave en el `.env`):
+Deja esa terminal abierta. En otra, entra como administrador:
 
 ```bash
-mariadb --no-defaults -S ~/.local/share/dawa-s15-db/mysql.sock -u root
+mariadb --no-defaults -S $HOME/.local/share/dawa-s15-db/mysql.sock -u root
 ```
+
+Y ejecuta, cambiando `cambia_esta_clave` por una clave tuya:
 
 ```sql
 CREATE DATABASE marketplace CHARACTER SET utf8mb4;
 CREATE USER 'marketplace'@'127.0.0.1' IDENTIFIED BY 'cambia_esta_clave';
 GRANT ALL ON marketplace.* TO 'marketplace'@'127.0.0.1';
+EXIT;
 ```
+
+Esta instancia es solo para practicar: el usuario `root` no tiene clave y el servidor escucha únicamente en `127.0.0.1`. En Windows o macOS, usa tu MariaDB instalada, ejecuta el mismo SQL y ajusta `DB_PORT` (normalmente 3306).
+
+### 3. Levantar el backend (terminal 2)
+
+Desde `semana15`:
+
+```bash
+cd backend-marketplace
+cp .env.example .env      # escribe tu clave en DB_PASSWORD
+pnpm install
+pnpm dev                  # http://localhost:3001
+```
+
+Espera el mensaje `Servidor corriendo en http://localhost:3001`. Solo la primera vez, desde otra terminal en `backend-marketplace`, carga los productos de prueba (pedirá tu clave):
+
+```bash
+mariadb -h 127.0.0.1 -P 3307 -u marketplace -p marketplace < database/seed.sql
+```
+
+### 4. Levantar el frontend (terminal 3)
+
+Desde `semana15`:
+
+```bash
+cd frontend-marketplace
+cp .env.example .env.local
+pnpm install
+pnpm dev                  # http://localhost:3000
+```
+
+### 5. Usar la aplicación
+
+| Qué hacer | Dónde |
+|---|---|
+| Ver el catálogo | `http://localhost:3000` |
+| Ver el detalle | Clic en un producto |
+| Crear un producto | `/admin`: completa el formulario y pulsa **Crear** |
+| Editar | `/admin`: **Editar**, cambia los datos y pulsa **Actualizar** |
+| Eliminar | `/admin`: **Eliminar** y luego **¿Confirmar?** |
+| Consultar la API | `http://localhost:3001/api/products` |
+
+Por ahora `/admin` no pide inicio de sesión: úsalo solo en local.
+
+### Problemas frecuentes
+
+| Síntoma | Solución |
+|---|---|
+| `ECONNREFUSED` al iniciar el backend | MariaDB está apagado o `DB_PORT` no coincide |
+| `Access denied for user` | La clave del `.env` no es la que pusiste en el SQL |
+| "No hay productos disponibles" | El backend está apagado o falta cargar `seed.sql` |
+| `Origen no permitido por CORS` | Abre `http://localhost:3000` (no `127.0.0.1`) o ajusta `CORS_ORIGINS` |
+| Puerto en uso | Cierra el proceso que ocupa el 3000, 3001 o 3307 |
+
+## Paso 1. Base de datos
+
+La guía del curso crea un MySQL en Railway. En este laboratorio se trabaja con **MariaDB** en el puerto 3307. Es un motor distinto, derivado de MySQL y compatible para lo que usa este proyecto: Sequelize se conecta con `dialect: 'mysql'` y el controlador `mysql2`. Los comandos están en la guía de usuario (punto 2).
 
 ## Paso 2. Backend
 
