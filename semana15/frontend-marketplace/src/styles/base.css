@@ -1,0 +1,12 @@
+@layer base {
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-display), sans-serif;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-signal);
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,31 @@
+/* Sin @apply de clases propias: las bases compartidas se declaran con selectores agrupados. */
+@layer components {
+  .shell { @apply mx-auto w-full max-w-6xl px-4 sm:px-6; }
+  .data { font-family: var(--font-data), monospace; }
+  .title { @apply text-4xl font-extrabold tracking-tight sm:text-6xl; }
+  .sheet { @apply border-2 border-ink bg-sheet; }
+  .price-tag {
+    @apply inline-block bg-signal py-1 pr-3 pl-5 font-semibold text-white;
+    font-family: var(--font-data), monospace;
+    clip-path: polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  }
+
+  .eyebrow,
+  .field-label {
+    @apply text-xs tracking-[0.2em] text-muted uppercase;
+    font-family: var(--font-data), monospace;
+  }
+  .field-label { @apply mb-1 block; }
+  .field { @apply w-full border-2 border-rule bg-white px-3 py-2 focus:border-ink focus:outline-none; }
+
+  .btn-primary,
+  .btn-ghost { @apply cursor-pointer border-2 border-ink px-4 py-2 font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply bg-ink text-sheet hover:border-signal-dark hover:bg-signal-dark; }
+  .btn-ghost { @apply bg-transparent hover:bg-ink hover:text-sheet; }
+
+  .link,
+  .link-danger { @apply cursor-pointer font-bold underline decoration-2 underline-offset-4 hover:text-signal-dark; }
+  .link-danger { @apply text-signal-dark; }
+
+  .notice { @apply border-l-4 border-signal bg-sheet px-4 py-3; }
+}

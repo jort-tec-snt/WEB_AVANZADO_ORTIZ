@@ -1,0 +1,10 @@
+/* Identidad "almacén": papel, tinta y una sola señal naranja. */
+@theme {
+  --color-paper: #f2ede2;
+  --color-sheet: #fbf8f1;
+  --color-ink: #17140f;
+  --color-muted: #6b6355;
+  --color-rule: #cfc6b3;
+  --color-signal: #d9430f;
+  --color-signal-dark: #a83208;
+}
